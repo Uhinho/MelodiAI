@@ -4,5 +4,5 @@ Tämän harjoitustyön tarkoituksena on tehdä tekoälysovellus, joka luo lyhyit
 
 ## Dokumentaatio
 
-[Määrittely](https://github.com/Uhinho/tiralab/blob/master/dokumentaatio/maarittelydokumentti.md)
-[Viikkoraportit](https://github.com/Uhinho/tiralab/blob/master/dokumentaatio/viikkoraportit/)
+- [Määrittely](https://github.com/Uhinho/tiralab/blob/master/dokumentaatio/maarittelydokumentti.md)
+- [Viikkoraportit](https://github.com/Uhinho/tiralab/blob/master/dokumentaatio/viikkoraportit/)
