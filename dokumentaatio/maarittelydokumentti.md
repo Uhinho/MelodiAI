@@ -1,4 +1,4 @@
-#Määrittelydokumentti
+# Määrittelydokumentti
 Harjoitustyö toteutetaan osana tietojenkäsittelytieteen kandiohjelmaa.
 
 ## Kieli
