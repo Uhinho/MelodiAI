@@ -20,4 +20,4 @@ MIDI-tiedostoista puretaan sävelten järjestys ja näin saadaan laskettua nuoti
 ## Lähteet 
 
 - https://en.wikipedia.org/wiki/Markov_chain
-
+- [Using Markov chain to compose music pieces](https://www.math.utah.edu/~gustafso/s2016/2270/published-projects-2016/zhang-bopanna/zhangJie-bopannaPrathusha-MarkovChainMusicComposition.pdf)
