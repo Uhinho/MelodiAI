@@ -30,7 +30,7 @@ public class MidiParser {
     
     public void parseMidi(String[] files) {
         
-        Trie trie = new Trie(3);
+        Trie trie = new Trie(2);
         DynamicList<Byte> dl = new DynamicList<Byte>();
         
         for (String file: files) {
@@ -77,8 +77,8 @@ public class MidiParser {
         trie.put(dl);
         //System.out.println(trie.includes(new byte[]{52,57}));
         //System.out.println(trie.includes(new byte[]{66,46,61}));
-        trie.print();
-        //trie.getFollowers(new byte[]{52,57}).print();
+        //trie.print();
+        trie.getFollowers(new byte[]{46,53}).print();
         
     }
     

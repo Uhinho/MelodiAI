@@ -6,3 +6,6 @@ Tein apumetodiksi yksinkertaisen printterin, joka tulostaa konsoliin trien auki,
 
 Tähän mennessä kommentoinnit ja checkstylet on jääneet vielä hieman takavasemmalle ja ne teenkin seuraavaksi kun perusrakenne trielle näyttää enemmän tai vähemmän nyt toimivan. 
 Itse MIDI tiedostojen generoinnissa ajattelin aluksi käyttää staattista nuotin pituutta ja rytmiä, ja miettiä mahdollisia toteutustapoja rytmiikan ja syvemmän melodisen sisällön aikaansaamiseksi kunhan perusidea toimii.
+
+Näyttäisi tähän astisella tutkailulla, että markovin 2. asteen ketju voisi soveltua parhaiten vaihtelevien melodioiden luomiseen rajallisella ja vähäisellä opetusmateriaalilla. Pidemmissä ketjuissa ei näytä syntyvän tarpeeksi toistuvia sävelkulkuja. Tätä täytyy tutkia ja testata tarkemmin tulevalla viikolla.
+
