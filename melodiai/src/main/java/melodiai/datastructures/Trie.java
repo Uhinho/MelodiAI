@@ -1,16 +1,23 @@
 
 package melodiai.datastructures;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.function.Consumer;
 
 
-public class Trie {
+
+public class Trie implements Iterable<TrieNode> {
     
     private TrieNode root;
     private int order;
+    private List<TrieNode> l;
     
     public Trie(int order) {
         this.root = new TrieNode();
         this.order = order;
+        this.l = new ArrayList<TrieNode>();
     }
     
     private void insert(DynamicList<Byte> notes, int order) {
@@ -106,38 +113,36 @@ public class Trie {
     
     /**
      * Helping method to test if the trie is working correctly.
-     * Helps to illustrate the trie structure.
-     * 
+     * Helps to illustrate the trie structure by printing out the structure
+     * @param node Node to print
+     * @param offset Offset for the recursion
      */
-    public void print() {
-        TrieNode curr = root;
+    public void printTrie(TrieNode node, int offset) {
         
-        if (!curr.hasChildren()) {
-            System.out.println("end");
-        } else {
-            for (int i = 0; i < curr.getChildren().length; i++) {
-                if (curr.getChildren()[i] != null){
-                    System.out.println("");
-                    System.out.println("");
-                    System.out.println(i + "PARENT: " + curr.getChildren()[i]);
-                    System.out.println("APPEARS: " + curr.getChildren()[i].getAppearances());
-                        for (int j = 0; j < curr.getChildren()[i].getChildren().length; j++) {
-                            if (curr.getChildren()[i].getChildren()[j] != null) {
-                                System.out.println(j + "CHILD" + curr.getChildren()[i].getChildren()[j]);
-                                System.out.println("APPEARS: " + curr.getChildren()[i].getChildren()[j].getAppearances());
-                                
-                                for (int y = 0; y < curr.getChildren()[i].getChildren()[j].getChildren().length; y++) {
-                                    if (curr.getChildren()[i].getChildren()[j].getChildren()[y] != null) {
-                                        System.out.println(y + "SECOND" + curr.getChildren()[i].getChildren()[j].getChildren()[y]);
-                                        System.out.println("APPEARS: " + curr.getChildren()[i].getChildren()[j].getChildren()[y].getAppearances());
-                                        }
-                                    }
-                    
-                            }   
-                        }
-                }
+        
+        for(TrieNode child: node.getChildren()) {
+            if (child != null) {
+                System.out.println(child.toString(offset));
+                printTrie(child, offset +2);
             }
-
+            
         }
+        
+        
+        
     }
+    
+    public TrieNode getRoot() {
+        return this.root;
+    }
+
+    @Override
+    public Iterator<TrieNode> iterator() {
+        return this.l.iterator();
+    }
+
+
+    
+   
 }
+

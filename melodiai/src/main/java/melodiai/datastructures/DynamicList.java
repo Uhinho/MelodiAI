@@ -1,12 +1,21 @@
 package melodiai.datastructures;
-
+/**
+ * 
+ * @author juho
+ * @param <T>
+ * 
+ * List structure that dynamically increases in size.
+ */
 
 public class DynamicList<T> {
 
     private Object[] dynamicList;
     private int size;
     private int max;
-
+    
+    /**
+     * Constructs a new dynamic list object of starting size of 10
+     */
     public DynamicList() {
         this.dynamicList = new Object[10];
         this.size = 0;

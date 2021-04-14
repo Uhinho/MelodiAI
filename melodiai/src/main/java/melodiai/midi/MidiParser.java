@@ -2,10 +2,8 @@ package melodiai.midi;
 
 import melodiai.datastructures.DynamicList;
 import melodiai.datastructures.Trie;
-import melodiai.datastructures.TrieNode;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sound.midi.InvalidMidiDataException;
@@ -30,7 +28,7 @@ public class MidiParser {
     
     public void parseMidi(String[] files) {
         
-        Trie trie = new Trie(2);
+        Trie trie = new Trie(4);
         DynamicList<Byte> dl = new DynamicList<Byte>();
         
         for (String file: files) {
@@ -77,8 +75,8 @@ public class MidiParser {
         trie.put(dl);
         //System.out.println(trie.includes(new byte[]{52,57}));
         //System.out.println(trie.includes(new byte[]{66,46,61}));
-        //trie.print();
-        trie.getFollowers(new byte[]{46,53}).print();
+        //trie.getFollowers(new byte[]{46,53}).print();
+        trie.printTrie(trie.getRoot(), 0);
         
     }
     

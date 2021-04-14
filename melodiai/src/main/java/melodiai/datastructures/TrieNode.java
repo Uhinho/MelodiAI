@@ -1,5 +1,7 @@
 package melodiai.datastructures;
 
+import java.util.Arrays;
+
 
 public class TrieNode {
 
@@ -34,10 +36,11 @@ public class TrieNode {
         return this.followers;
     }
     
-    public String toString() {
+    public String toString(int offset) {
         int note = this.noteKey;
-        
-        return "" + note;
+        char[] offs = new char[offset];
+        Arrays.fill(offs, ' ');
+        return new String(offs) + this.noteKey;
     }
     
     public boolean hasChildren() {

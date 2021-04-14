@@ -11,13 +11,10 @@ public class Main {
         MidiParser midiParser = new MidiParser();
         String[] files = {
             "Midifiles/m1.mid",
-            "Midifiles/m2.mid",
-            "Midifiles/m3.mid",
-            "Midifiles/m4.mid"
         };
         
         midiParser.parseMidi(files);
-    
+        
         
     }
     
