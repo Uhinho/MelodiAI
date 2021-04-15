@@ -41,7 +41,7 @@ public class MidiParser {
                 int trackNumber = 0;
                 for (Track track :  sequence.getTracks()) {
                     trackNumber++;
-                    for (int i=0; i < track.size(); i++) {
+                    for (int i = 0; i < track.size(); i++) {
                         MidiEvent event = track.get(i);
                         //System.out.print("@" + event.getTick() + " "); LATER USE
                         MidiMessage message = event.getMessage();

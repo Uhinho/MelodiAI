@@ -8,16 +8,14 @@ import java.util.function.Consumer;
 
 
 
-public class Trie implements Iterable<TrieNode> {
+public class Trie {
     
     private TrieNode root;
     private int order;
-    private List<TrieNode> l;
     
     public Trie(int order) {
         this.root = new TrieNode();
         this.order = order;
-        this.l = new ArrayList<TrieNode>();
     }
     
     private void insert(DynamicList<Byte> notes, int order) {
@@ -27,7 +25,7 @@ public class Trie implements Iterable<TrieNode> {
             if (notes.size() == 1) {
                 this.addNew(root, notes.get(0));
             } else {
-                for (int i = 0; i < notes.size() - order; i++){
+                for (int i = 0; i < notes.size() - order; i++) {
                     for (int y = i; y <= i + order; y++) {
                         byte note = notes.get(y);
                         this.addNew(current, note);
@@ -130,10 +128,10 @@ public class Trie implements Iterable<TrieNode> {
     private void printTrie(TrieNode node, int offset) {
         
         
-        for(TrieNode child: node.getChildren()) {
+        for (TrieNode child: node.getChildren()) {
             if (child != null) {
                 System.out.println(child.toStringWithOffset(offset) + "(" + child.getAppearances() + ")");
-                printTrie(child, offset +2);
+                printTrie(child, offset + 2);
             }
             
         }
@@ -151,17 +149,6 @@ public class Trie implements Iterable<TrieNode> {
         return this.root;
     }
     
-    /**
-     * Iterator for printTrie() method to iterate through TrieNode objects
-     * @return 
-     */
-    @Override
-    public Iterator<TrieNode> iterator() {
-        return this.l.iterator();
-    }
-
-
-    
-   
+ 
 }
 

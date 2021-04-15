@@ -1,4 +1,8 @@
 package melodiai.datastructures;
+
+import java.util.Iterator;
+import java.util.ListIterator;
+
 /**
  * 
  * @author juho
@@ -7,7 +11,7 @@ package melodiai.datastructures;
  * List structure that dynamically increases in size.
  */
 
-public class DynamicList<T> {
+public class DynamicList<T> implements Iterable<T>{
 
     private Object[] dynamicList;
     private int size;
@@ -48,7 +52,7 @@ public class DynamicList<T> {
     
     public void insertMany(T[] arr) {
         
-        for (int i = 0; i < arr.length; i++ ) {
+        for (int i = 0; i < arr.length; i++) {
             this.insert((T) arr[i]);
         }
     }
@@ -66,5 +70,10 @@ public class DynamicList<T> {
             System.out.println(this.dynamicList[i]);
         }
     }
-    
+
+    @Override
+    public Iterator<T> iterator() {
+        return new DynamicListIterator<T>(this);
+    }
+
 }
