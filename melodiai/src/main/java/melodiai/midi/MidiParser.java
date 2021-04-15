@@ -1,7 +1,6 @@
 package melodiai.midi;
 
 import melodiai.datastructures.DynamicList;
-import melodiai.datastructures.Trie;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -14,22 +13,26 @@ import javax.sound.midi.Sequence;
 import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Track;
 
-
+/**
+ * 
+ * @author juho
+ * 
+ * Object for parsing MIDI files to byte data
+ */
 
 public class MidiParser {
     
-    private final int NOTE_ON;
-    private final int NOTE_OFF;
+    private final int NOTE_ON = 144;
+    private final int NOTE_OFF = 128;
 
-    public MidiParser() {
-        this.NOTE_ON = 144;
-        this.NOTE_OFF = 128;
-    }
-    
-    public void parseMidi(String[] files) {
+    /**
+     * Parses note keys from MIDI files
+     * @param files array of paths to MIDI files
+     * @return returns a list of all the note keys in given array in order of appearance
+     */
+    public DynamicList<Byte> parseMidi(String[] files) {
         
-        Trie trie = new Trie(4);
-        DynamicList<Byte> dl = new DynamicList<Byte>();
+        DynamicList<Byte> notesList = new DynamicList<Byte>();
         
         for (String file: files) {
             try {
@@ -38,25 +41,21 @@ public class MidiParser {
                 int trackNumber = 0;
                 for (Track track :  sequence.getTracks()) {
                     trackNumber++;
-                    //System.out.println("Track " + trackNumber + ": size = " + track.size());
-                    //System.out.println();
-
                     for (int i=0; i < track.size(); i++) {
                         MidiEvent event = track.get(i);
-                        //System.out.print("@" + event.getTick() + " ");
+                        //System.out.print("@" + event.getTick() + " "); LATER USE
                         MidiMessage message = event.getMessage();
                         if (message instanceof ShortMessage) {
                             ShortMessage sm = (ShortMessage) message;
                             if (sm.getCommand() == NOTE_ON) {
                                 int key = sm.getData1();
-                                //System.out.println("Note on, key: " + key) ;
-                                dl.insert((byte) key);
+                                //System.out.println("Note on, key: " + key) ; LATER USE
+                                notesList.insert((byte) key);
                             } else if (sm.getCommand() == NOTE_OFF) {
                                 int key = sm.getData1();
-                                //System.out.println("Note off, key: " + key);
-                                //System.out.println("");
+                                //System.out.println("Note off, key: " + key); LATER USE
                             } else {
-                                //System.out.println("Command: " + sm.getCommand());
+                                //System.out.println("Command: " + sm.getCommand()); LATER USE
                             }
                         }
                     }    
@@ -72,12 +71,7 @@ public class MidiParser {
             
         }
         
-        trie.put(dl);
-        //System.out.println(trie.includes(new byte[]{52,57}));
-        //System.out.println(trie.includes(new byte[]{66,46,61}));
-        //trie.getFollowers(new byte[]{46,53}).print();
-        trie.printTrie(trie.getRoot(), 0);
-        
+        return notesList;
     }
     
 }

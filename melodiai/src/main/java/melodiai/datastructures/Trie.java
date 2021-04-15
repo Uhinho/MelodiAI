@@ -88,6 +88,19 @@ public class Trie implements Iterable<TrieNode> {
         return current.getFollowers();
     }
     
+    public void printFollowers(byte[] key) {
+        DynamicList dl = this.getFollowers(key);
+        
+        for (int i = 0; i < dl.size(); i++) {
+            System.out.println(dl.get(i).toString());
+        }
+    }
+    
+    /**
+     * Checks if sequence is included in the trie
+     * @param key array of bytes to find
+     * @return true / false
+     */
     public boolean includes(byte[] key) {
         int level;
         int length = key.length;
@@ -96,16 +109,13 @@ public class Trie implements Iterable<TrieNode> {
         TrieNode pointer = root;
         
         for (level = 0; level < length; level++) {
-            noteKey = key[level];
-            System.out.println(noteKey);
-            
+            noteKey = key[level];        
             if (pointer.getChildren()[noteKey] == null) {
                 System.out.println("empty");
                 return false;
             }
             
             pointer = pointer.getChildren()[noteKey];
-            System.out.println(pointer.getChildren()[noteKey]);
         }
         
         return (pointer != null &&  level == order);
@@ -117,25 +127,34 @@ public class Trie implements Iterable<TrieNode> {
      * @param node Node to print
      * @param offset Offset for the recursion
      */
-    public void printTrie(TrieNode node, int offset) {
+    private void printTrie(TrieNode node, int offset) {
         
         
         for(TrieNode child: node.getChildren()) {
             if (child != null) {
-                System.out.println(child.toString(offset));
+                System.out.println(child.toStringWithOffset(offset) + "(" + child.getAppearances() + ")");
                 printTrie(child, offset +2);
             }
             
         }
-        
-        
-        
+
+    }
+    
+    /**
+     * Print trie from start to finish
+     */
+    public void print() {
+        this.printTrie(root, 0);
     }
     
     public TrieNode getRoot() {
         return this.root;
     }
-
+    
+    /**
+     * Iterator for printTrie() method to iterate through TrieNode objects
+     * @return 
+     */
     @Override
     public Iterator<TrieNode> iterator() {
         return this.l.iterator();

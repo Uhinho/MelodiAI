@@ -2,7 +2,12 @@ package melodiai.datastructures;
 
 import java.util.Arrays;
 
-
+/**
+ * 
+ * @author juho
+ * 
+ * Node object for trie
+ */
 public class TrieNode {
 
     private final int NOTES_IN_MIDI = 128;
@@ -36,11 +41,21 @@ public class TrieNode {
         return this.followers;
     }
     
-    public String toString(int offset) {
+    /**
+     * toString method to print node key in recursive trie print
+     * @param offset determines how many empty spaces are entered in front of the note key.
+     * @return 
+     */
+    public String toStringWithOffset(int offset) {
         int note = this.noteKey;
         char[] offs = new char[offset];
         Arrays.fill(offs, ' ');
         return new String(offs) + this.noteKey;
+    }
+
+    @Override
+    public String toString() {
+        return "" + noteKey;
     }
     
     public boolean hasChildren() {
@@ -59,4 +74,5 @@ public class TrieNode {
     public int getAppearances() {
         return this.appears;
     }
+
 }
