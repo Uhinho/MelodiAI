@@ -109,7 +109,6 @@ public class Trie {
         for (level = 0; level < length; level++) {
             noteKey = key[level];        
             if (pointer.getChildren()[noteKey] == null) {
-                System.out.println("empty");
                 return false;
             }
             
@@ -132,10 +131,8 @@ public class Trie {
             if (child != null) {
                 System.out.println(child.toStringWithOffset(offset) + "(" + child.getAppearances() + ")");
                 printTrie(child, offset + 2);
-            }
-            
+            }          
         }
-
     }
     
     /**

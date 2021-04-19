@@ -1,7 +1,9 @@
 package melodiai.melodiai;
 
 import melodiai.ai.Sequencer;
+import melodiai.datastructures.DynamicList;
 import melodiai.datastructures.Trie;
+import melodiai.datastructures.TrieNode;
 import melodiai.midi.MidiParser;
 
 public class Main {
@@ -21,14 +23,28 @@ public class Main {
             "Midifiles/m6.mid"
         };
         
-        Trie trie = new Trie(3);
-        
+        Trie trie = new Trie(4);
+ 
         trie.put(midiParser.parseMidi(files));
         
         byte[] test = new byte[]{65,69,77};
  
         //trie.printFollowers(new byte[]{65,69,77});
-        trie.print();
+        //trie.print();
+        
+        //DynamicList<TrieNode> nodes = trie.getFollowers(new byte[]{65,69});
+        
+        // System.out.println(seq.getWeightedRandom(nodes).getNoteKey());
+        
+        /*for (TrieNode node: nodes) {
+            System.out.println(node.toStringWithOffset(0) + "  :" + node.getAppearances());
+        } */
+        
+        byte[] s = seq.generateSequence(100, trie, 4, (byte) 55);
+        
+        for (byte b: s) {
+            System.out.println(b);
+        }
         
     }
     
