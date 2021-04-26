@@ -1,5 +1,6 @@
 package melodiai.melodiai;
 
+import java.io.File;
 import javax.sound.midi.InvalidMidiDataException;
 import melodiai.ai.Sequencer;
 import melodiai.datastructures.DynamicList;
@@ -7,6 +8,7 @@ import melodiai.datastructures.Trie;
 import melodiai.datastructures.TrieNode;
 import melodiai.midi.MidiBuilder;
 import melodiai.midi.MidiParser;
+import melodiai.midi.Note;
 
 public class Main {
     
@@ -14,39 +16,35 @@ public class Main {
 
 
     public static void main(String[] args) throws InvalidMidiDataException {
+        
         MidiParser midiParser = new MidiParser();
         Sequencer seq = new Sequencer();
         MidiBuilder mb = new MidiBuilder();
-        String[] files = {
-            "Midifiles/m1.mid",
-            "Midifiles/m2.mid",
-            "Midifiles/m3.mid",
-            "Midifiles/m4.mid",
-            "Midifiles/m5.mid",
-            "Midifiles/m6.mid",
-            "Midifiles/m7.mid"
-        };
+        File folder = new File("Midifiles/Cmajor/");
+        File[] listOfFiles = folder.listFiles();
         
-        Trie trie = new Trie(4);
- 
-        trie.put(midiParser.parseMidi(files));
+        midiParser.parseMidi(listOfFiles);
         
- 
-        //trie.printFollowers(new byte[]{65,69,77});
-        //trie.print();
-        
-        //DynamicList<TrieNode> nodes = trie.getFollowers(new byte[]{65,69});
-        
-        // System.out.println(seq.getWeightedRandom(nodes).getNoteKey());
-        
-        /*for (TrieNode node: nodes) {
-            System.out.println(node.toStringWithOffset(0) + "  :" + node.getAppearances());
-        } */
-        
-        byte[] s = seq.generateSequence(200, trie, 4, (byte) 67);
+        //midiParser.getNoteLengths().print();
         
         
-        mb.createMidiFile("tickTesti3", s, 120);
+        Trie noteKeyTrie = new Trie(4);
+        noteKeyTrie.put(midiParser.getNoteKeys());
+        
+        Trie noteLengthTrie = new Trie(4); 
+        noteLengthTrie.put(midiParser.getNoteLengths());
+        
+        Trie velocityTrie = new Trie(4);
+        velocityTrie.put(midiParser.getVelocities());
+        
+
+           
+        int [] noteSeq = seq.generateSequence(500, noteKeyTrie, 3, noteKeyTrie.getRandomRootChild());
+        int [] veloSeq = seq.generateSequence(500, velocityTrie, 3, velocityTrie.getRandomRootChild());
+        int [] lengthSeq = seq.generateSequence(500, noteLengthTrie, 3, noteLengthTrie.getRandomRootChild()); 
+        
+        mb.createMidiFile("Uus", noteSeq, veloSeq, lengthSeq);
+
         
     }
     

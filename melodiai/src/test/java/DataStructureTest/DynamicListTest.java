@@ -57,4 +57,22 @@ public class DynamicListTest {
         
         assertEquals(10000, intList.size());
     }
+    
+    public void listRemoveTest() {
+        DynamicList<Integer> intList = new DynamicList<>();
+        
+        for (int i = 0; i < 10000; i++) {
+            intList.insert(i);
+        }
+        
+        for (int j = 8000; j < 9000; j++){
+            intList.remove(j);
+        }
+        
+        for (int y = 0; y < 11000; y++) {
+            intList.insert(y);
+        }
+        
+        assertEquals(20000, intList.size());
+    }
 }

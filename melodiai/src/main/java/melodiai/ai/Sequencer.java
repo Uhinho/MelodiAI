@@ -11,21 +11,21 @@ import melodiai.datastructures.TrieNode;
  */
 public class Sequencer {
     
-    public byte[] generateSequence(int length, Trie trie, int order, byte start) {
+    public int[] generateSequence(int length, Trie trie, int order, int start) {
         
-        byte[] list = new byte[length];
+        int[] list = new int[length];
         
         list[0] = start;
         
         int index = 0;
         while (index < order - 1) {
-            byte next = this.getNext(list, trie, 0, index);
+            int next = this.getNext(list, trie, 0, index);
             list[index + 1] = next;
             index++;
         }
         
         for(int i = 0; i < length - order; i++) {
-            byte next = getNext(list, trie, i, i + order - 1);
+            int next = getNext(list, trie, i, i + order - 1);
             list[i + order] = next;
         }
         
@@ -40,16 +40,16 @@ public class Sequencer {
      * @param to end index for the new search key
      * @return next note
      */
-    private byte getNext(byte[] currentSequence, Trie trie, int from, int to) {
+    private int getNext(int[] currentSequence, Trie trie, int from, int to) {
         
-        byte[] key =  new byte[to + 1 - from];
+        int[] key =  new int[to + 1 - from];
         System.arraycopy(currentSequence, from, key, 0, (to + 1 - from));
             
         DynamicList<TrieNode> followingNotes = trie.getFollowers(key);
         
         // If key doesn't exist in trie, find followers of shorter key
-        if (followingNotes.isEmpty() || followingNotes == null) {
-            byte[] narrowSearch = new byte[1];
+        if (followingNotes == null || followingNotes.isEmpty()) {
+            int[] narrowSearch = new int[1];
             
             //use only the last note of the sequence
             narrowSearch[0] = key[key.length - 1];
@@ -58,17 +58,17 @@ public class Sequencer {
         
         // If still no followers, return the root note
         if (followingNotes == null) {
-            byte rootNote = (byte) key[0];
+            int rootNote =  key[0];
             return rootNote;
         }
         
         // lone follower is returned directly
         if (followingNotes.size() == 1) {
-            return followingNotes.get(0).getNoteKey();
+            return followingNotes.get(0).getNodeKey();
         }
         
         // Next note is calculated as weighted random key by appearance amounts as weights.
-        return this.getWeightedRandom(followingNotes).getNoteKey();
+        return this.getWeightedRandom(followingNotes).getNodeKey();
     }
     
     private int countTotalAppearances(DynamicList<TrieNode> nodeList) {
@@ -90,18 +90,13 @@ public class Sequencer {
     private TrieNode getWeightedRandom(DynamicList<TrieNode> nodeList) {
         
         int totalCount = this.countTotalAppearances(nodeList);
-        double randomNum = 0.0;
-        
-        // Eliminate the randomNum from being zero
-        while (randomNum == 0.0) {
-            randomNum = Math.random() * totalCount;
-        }
+        double randomNum = Math.random() * totalCount;
         
         double countAppearances = 0.0;
         
         for (TrieNode node: nodeList) {
             countAppearances += (double) node.getAppearances();
-            if (countAppearances >= randomNum) {
+            if (countAppearances > randomNum) {
                 return node;
             }
         }

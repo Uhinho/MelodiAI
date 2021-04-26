@@ -2,8 +2,6 @@ package melodiai.midi;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MetaMessage;
 import javax.sound.midi.MidiEvent;
@@ -13,7 +11,6 @@ import javax.sound.midi.Sequence;
 import javax.sound.midi.ShortMessage;
 import javax.sound.midi.SysexMessage;
 import javax.sound.midi.Track;
-import org.apache.commons.codec.DecoderException;
 
 
 public class MidiBuilder {
@@ -33,8 +30,8 @@ public class MidiBuilder {
     
     private Track track;
     private SysexMessage sysex;
-    byte[] tempo;
     private Sequence sequence;
+    private int ticksPerBeat;
     
     
     public MidiBuilder() {
@@ -42,7 +39,9 @@ public class MidiBuilder {
         this.sysex = new SysexMessage();
     }
     
-    private void createTrack(int ticksPerBeat) throws InvalidMidiDataException {
+    private void createTrack() throws InvalidMidiDataException {
+        ticksPerBeat = 480;
+        
         this.sequence = new Sequence(javax.sound.midi.Sequence.PPQ, ticksPerBeat);
         this.track = this.sequence.createTrack();
     }
@@ -80,21 +79,21 @@ public class MidiBuilder {
         IF TEMPO IS NOT SET THE DEFAULT IS 120BPM
     */
     
-    private void setTempo(int bpm) throws InvalidMidiDataException {
+    private void setTempo() throws InvalidMidiDataException {
         
-        //120bpm
+        int bpm = 120;
         // byte[] bt = {(byte)0xFF, (byte)0x51, (byte)0x03, (byte)0x07, (byte)0xA1, (byte)0x20};
         
         byte[] tempoHex = new byte[3]; // big endian 3 bytes
         
+        // 60 000 000 microseconds in minute. Tempo = amt of 1/4 notes per minute
         int tempo = 60000000 / bpm;
+        
         
         tempoHex[0] = (byte) ((tempo >> 16) & 0xFF);
         tempoHex[1] = (byte) ((tempo >> 8) & 0xFF);
         tempoHex[2] = (byte) ((tempo & 0xFF));
-        
-        this.tempo = tempoHex;
-        
+   
         MetaMessage metaMsg = new MetaMessage();
         metaMsg.setMessage(0x51, tempoHex, tempoHex.length);
     }
@@ -133,24 +132,25 @@ public class MidiBuilder {
         this.addMidiEventToTrack(shortMsg, (long) 0);
     }
     
-    private void addNotesToTrack(byte [] notesArray) throws InvalidMidiDataException {
+    private void addNotesToTrack(int [] notesArray, int [] lengthArray, int [] velocityArray) throws InvalidMidiDataException {
         
+        // 1 tick = 8000 microseconds (8 milliseconds)
         long tickCounter = 1;
-        
+        boolean poly = false;
         for (int i = 0; i < notesArray.length; i++) {
             
             // note on
             ShortMessage sm = new ShortMessage();
-            sm.setMessage(0x90, notesArray[i], 0x60);
-            
+            sm.setMessage(0x90, notesArray[i], velocityArray[i]);
             this.addMidiEventToTrack(sm, tickCounter);
             
+            tickCounter += this.ticksToSkip(lengthArray[i]);
+            
+           // System.out.println(lengthArray[i] * this.ticksPerBeat);
+            
             //note off
-            // note length fixed to 120 ticks;
-            tickCounter += 10;
             sm = new ShortMessage();
             sm.setMessage(0x80, notesArray[i], 0x40);
-            
             this.addMidiEventToTrack(sm, tickCounter);
         }
         
@@ -162,6 +162,15 @@ public class MidiBuilder {
         this.addMidiEventToTrack(metaMsg, tickCounter + 19);
         
     }
+    
+    private long ticksToSkip(int noteLength) {
+        double noteDenomerator = (double) noteLength;
+        double noteKeyValue = 4.0 / noteDenomerator;
+        
+        double ticksToSkip = this.ticksPerBeat;
+        
+        return (long) ticksToSkip;
+    }
 
     private void writeMIDItoFile(String name) throws IOException {
         File file = new File("output/" + name + ".mid");
@@ -169,17 +178,17 @@ public class MidiBuilder {
     }
     
     
-    public void createMidiFile(String name, byte [] notesSequence, int tempo) throws InvalidMidiDataException {
+    public void createMidiFile(String name, int [] notesSequence, int [] velocitySequence, int [] noteLengthSequence) throws InvalidMidiDataException {
         
         
         try {
             
-            this.createTrack(24);
+            this.createTrack();
             this.setGeneralMidiSysEx();
             
             this.addMidiEventToTrack(sysex, 0);
 
-            this.setTempo(tempo);
+            this.setTempo();
             
             this.setTrackName("Test track");
 
@@ -189,13 +198,12 @@ public class MidiBuilder {
             
             this.setInstrument();
             
-            this.addNotesToTrack(notesSequence);
+            this.addNotesToTrack(notesSequence, noteLengthSequence, velocitySequence);
             
             this.writeMIDItoFile(name);
             
-        } catch (Exception e) {
-            System.out.println(e.toString());
-            
+        } catch (IOException | InvalidMidiDataException e) {
+            System.out.println(e.toString());         
         }
         
         

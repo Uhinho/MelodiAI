@@ -12,25 +12,25 @@ public class TrieNode {
 
     private final int NOTES_IN_MIDI = 128;
     private int appears;
-    private byte noteKey;
+    private int key;
     private TrieNode[] children;
     private DynamicList<TrieNode> followers;
     
     public TrieNode() {
-        this.noteKey = -128;
-        this.children = new TrieNode[NOTES_IN_MIDI];
+        this.key = -128;
+        this.children = new TrieNode[600];
         this.followers = new DynamicList<>();
     }
 
-    public TrieNode(byte noteKey) {
-        this.noteKey = noteKey;
-        this.children = new TrieNode[NOTES_IN_MIDI];
+    public TrieNode(int nodeKey) {
+        this.key = nodeKey;
+        this.children = new TrieNode[600];
         this.followers = new DynamicList<>();
         this.appears = 1;
     }
     
-    public byte getNoteKey() {
-        return this.noteKey;
+    public int getNodeKey() {
+        return this.key;
     }
     
     public TrieNode[] getChildren() {
@@ -47,20 +47,19 @@ public class TrieNode {
      * @return 
      */
     public String toStringWithOffset(int offset) {
-        int note = this.noteKey;
         char[] offs = new char[offset];
         Arrays.fill(offs, ' ');
-        return new String(offs) + this.noteKey;
+        return new String(offs) + this.key;
     }
 
     @Override
     public String toString() {
-        return "" + noteKey;
+        return "" + key;
     }
     
     public boolean hasChildren() {
-        for (int i = 0; i < children.length; i++) {
-            if (children[i] != null) {
+        for (TrieNode child : children) {
+            if (child != null) {
                 return true;
             } 
         }
@@ -74,5 +73,6 @@ public class TrieNode {
     public int getAppearances() {
         return this.appears;
     }
+    
 
 }

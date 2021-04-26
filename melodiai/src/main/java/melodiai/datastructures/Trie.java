@@ -1,10 +1,6 @@
 
 package melodiai.datastructures;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.function.Consumer;
 
 
 
@@ -18,18 +14,18 @@ public class Trie {
         this.order = order;
     }
     
-    private void insert(DynamicList<Byte> notes, int order) {
+    private void insert(DynamicList<Integer> nodes, int order) {
         
-        if (notes.size() > order) {
+        if (nodes.size() > order) {
             TrieNode current = root;
-            if (notes.size() == 1) {
-                this.addNew(root, notes.get(0));
+            if (nodes.size() == 1) {
+                this.addNew(root, nodes.get(0));
             } else {
-                for (int i = 0; i < notes.size() - order; i++) {
+                for (int i = 0; i < nodes.size() - order; i++) {
                     for (int y = i; y <= i + order; y++) {
-                        byte note = notes.get(y);
-                        this.addNew(current, note);
-                        current = current.getChildren()[note];
+                        int nodeKey = nodes.get(y);
+                        this.addNew(current, nodeKey);
+                        current = current.getChildren()[nodeKey];
                     }
                     
                     current = root;
@@ -38,24 +34,23 @@ public class Trie {
         }
     }
     
-    public void put(DynamicList<Byte> notes) {
-        if (notes.size() > order) {
-            this.insert(notes, order);
+    public void put(DynamicList<Integer> nodes) {
+        if (nodes.size() > order) {
+            this.insert(nodes, order);
         } else {
-            this.insert(notes, notes.size());
+            this.insert(nodes, nodes.size());
         }
     }
     
-    private void addNew(TrieNode root, int note) {
+    private void addNew(TrieNode root, int nodeKey) {
         
-        byte noteKey = (byte) note;
-        
-        if (root.getChildren()[note] == null) {
+        int noteKey = nodeKey;   
+        if (root.getChildren()[nodeKey] == null) {
             TrieNode newNode = new TrieNode(noteKey);
-            root.getChildren()[note] = newNode;
+            root.getChildren()[nodeKey] = newNode;
             root.getFollowers().insert(newNode);
         } else {
-            this.updateNode(root, note);
+            this.updateNode(root, nodeKey);
         }
         
     }
@@ -67,12 +62,12 @@ public class Trie {
     }
     
     
-    public DynamicList<TrieNode> getFollowers(byte[] key) {
+    public DynamicList<TrieNode> getFollowers(int[] key) {
         
         TrieNode current = root;
         
         for (int i = 0; i < key.length; i++) {
-            byte note = key[i];
+            int note = key[i];
             
             TrieNode node = current.getChildren()[note];
             
@@ -86,7 +81,7 @@ public class Trie {
         return current.getFollowers();
     }
     
-    public void printFollowers(byte[] key) {
+    public void printFollowers(int[] key) {
         DynamicList dl = this.getFollowers(key);
         
         for (int i = 0; i < dl.size(); i++) {
@@ -99,7 +94,7 @@ public class Trie {
      * @param key array of bytes to find
      * @return true / false
      */
-    public boolean includes(byte[] key) {
+    public boolean includesNoteSequence(int[] key) {
         int level;
         int length = key.length;
         int noteKey;
@@ -144,6 +139,16 @@ public class Trie {
     
     public TrieNode getRoot() {
         return this.root;
+    }
+    
+    public int getRandomRootChild() {
+        int random = (int) (Math.random() * this.root.getChildren().length);
+        
+        while (this.root.getChildren()[random] == null){
+            random = (int) (Math.random() * this.root.getChildren().length);
+        }
+        
+        return this.root.getChildren()[random].getNodeKey();
     }
     
  

@@ -21,12 +21,12 @@ import static org.junit.Assert.*;
  */
 public class TrieTest {
     Trie trie;
-    DynamicList<Byte> byteList;
+    DynamicList<Integer> list;
     
     
     public TrieTest() {
         trie = new Trie(3);
-        byteList = new DynamicList<Byte>();
+        list = new DynamicList<Integer>();
     }
     
     @BeforeClass
@@ -49,11 +49,7 @@ public class TrieTest {
     public void trieIsCreated() {
         
         boolean exists;
-        if (trie.getRoot() != null) {
-            exists = true;
-        } else {
-            exists = false;
-        }
+        exists = trie.getRoot() != null;
         
         assertTrue(exists);
         
@@ -61,10 +57,10 @@ public class TrieTest {
     
     @Test
     public void notesAreInsertedToTrie() {
-        byteList.insertMany(new Byte[]{1,2,3,4,5,6,7,8,9,10,10,9,8,7,6,5,4,3,2,1});
+        list.insertMany(new Integer[]{1,2,3,4,5,6,7,8,9,10,10,9,8,7,6,5,4,3,2,1});
         
-        trie.put(byteList);
+        trie.put(list);
         
-        assertTrue(trie.includes(new byte[]{3,4,5}));
+        assertTrue(trie.includesNoteSequence(new int[]{3,4,5}));
     }
 }

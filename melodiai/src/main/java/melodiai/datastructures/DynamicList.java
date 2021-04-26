@@ -1,5 +1,6 @@
 package melodiai.datastructures;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.ListIterator;
 
@@ -15,7 +16,6 @@ public class DynamicList<T> implements Iterable<T>{
 
     private Object[] dynamicList;
     private int size;
-    private int max;
     
     /**
      * Constructs a new dynamic list object of starting size of 10
@@ -23,14 +23,11 @@ public class DynamicList<T> implements Iterable<T>{
     public DynamicList() {
         this.dynamicList = new Object[10];
         this.size = 0;
-        this.max = 10;
     }
 
     private void increaseSize() {
-        max *= 2;
-        Object[] updated = new Object[max];
-        System.arraycopy(this.dynamicList, 0, updated, 0, this.size);
-        this.dynamicList = updated;
+        int increasedCapacity = dynamicList.length * 2;
+        dynamicList = Arrays.copyOf(dynamicList, increasedCapacity);
     }
 
     public int size() {
@@ -42,12 +39,11 @@ public class DynamicList<T> implements Iterable<T>{
     }
     
     public void insert(T item) {
-        if (this.size == this.max) {
+        if (this.size == dynamicList.length) {
             this.increaseSize();
         }
         
-        this.dynamicList[this.size] = item;
-        this.size++;
+        this.dynamicList[this.size++] = item;
     }
     
     public void insertMany(T[] arr) {
@@ -64,11 +60,25 @@ public class DynamicList<T> implements Iterable<T>{
         
         return (T) this.dynamicList[i];
     }
-    
+     
     public void print() {
         for (int i = 0; i < this.size(); i++) {
             System.out.println(this.dynamicList[i]);
         }
+    }
+    
+    public void remove(int index) {
+        if (index < 0 || index >= this.size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + this.size);
+        }
+        
+        Object removed = this.dynamicList[index];
+        
+        for (int i = index; i < this.size - 1; i++) {
+            this.dynamicList[i] = this.dynamicList[i + 1];
+        }
+        
+        size--;
     }
 
     @Override
