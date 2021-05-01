@@ -13,6 +13,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
+import melodiai.datastructures.DynamicList;
+import melodiai.datastructures.TrieNode;
 
 public class Ui extends JFrame {
     static Ui ui;
@@ -26,12 +28,12 @@ public class Ui extends JFrame {
     JLabel lbL3;
     JList lsStyleList;
     JLabel lbL4;
-    JButton btStartBtn;
+    JButton generateBtn;
     
     
-    public Ui() {
+    public Ui(TrieNode[] startingNotes) {
         
-        super( "TITLE" );
+        super( "MelodiAI" );
 
         pnPanel0 = new JPanel();
         pnPanel0.setBorder( BorderFactory.createTitledBorder( "" ) );
@@ -52,7 +54,7 @@ public class Ui extends JFrame {
         gbPanel0.setConstraints( lbL1, gbcPanel0 );
         pnPanel0.add( lbL1 );
 
-        String []dataStartNoteList = { "Chocolate", "Ice Cream", "Apple Pie" };
+        String []dataStartNoteList = this.startingNotesToStringArray(startingNotes);
         lsStartNoteList = new JList( dataStartNoteList );
         JScrollPane scpStartNoteList = new JScrollPane( lsStartNoteList );
         gbcPanel0.gridx = 1;
@@ -147,7 +149,7 @@ public class Ui extends JFrame {
         gbPanel0.setConstraints( lbL4, gbcPanel0 );
         pnPanel0.add( lbL4 );
 
-        btStartBtn = new JButton( "Generate"  );
+        generateBtn = new JButton( "Generate"  );
         gbcPanel0.gridx = 5;
         gbcPanel0.gridy = 14;
         gbcPanel0.gridwidth = 6;
@@ -157,14 +159,48 @@ public class Ui extends JFrame {
         gbcPanel0.weighty = 0;
         gbcPanel0.anchor = GridBagConstraints.NORTH;
         gbcPanel0.insets = new Insets( 10,10,10,10 );
-        gbPanel0.setConstraints( btStartBtn, gbcPanel0 );
-        pnPanel0.add( btStartBtn );
+        gbPanel0.setConstraints(generateBtn, gbcPanel0 );
+        pnPanel0.add(generateBtn );
+        generateBtn.addActionListener(e -> {
+            
+        
+        });
 
         setDefaultCloseOperation( EXIT_ON_CLOSE );
 
         setContentPane( pnPanel0 );
         pack();
         setVisible( true );
-     } 
+     }
+    
+    
+    public String[] startingNotesToStringArray(TrieNode[] nodeArray) {
+        DynamicList<String> notesList = new DynamicList<>();
+        
+        for (int i = 0; i < nodeArray.length; i++) {
+            if (nodeArray[i] != null) {
+                String note = this.getNoteName(nodeArray[i].getNodeKey());
+                if (!note.isBlank() && !note.isEmpty()) {
+                    notesList.insert(note);
+                }
+            }
+        }
+        
+        String[] strArray = new String[notesList.size()];
+        
+        for (int i = 0; i < notesList.size(); i++) {
+           strArray[i] = notesList.get(i);
+        }
+        
+        return strArray;
+    }
+    
+    private String getNoteName(int noteNumber){
+        noteNumber -= 21;
+        String[] notes = new String[] {"A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"};
+        int octave = noteNumber / 12 + 1;
+        String name = notes[noteNumber % 12];
+        return name + octave;
+    }
     
 }

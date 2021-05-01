@@ -1,8 +1,11 @@
 # MelodiAI
 
-Tämän harjoitustyön tarkoituksena on tehdä tekoälysovellus, joka luo lyhyitä melodioita annetun harjoitusmateriaalin perusteella.
+Tämän harjoitustyön tarkoituksena on rakentaa sovellus, joka säveltää melodioita annettuun opetusmateriaaliin pohjautuen.
 
 ## Dokumentaatio
 
-- [Määrittely](https://github.com/Uhinho/tiralab/blob/master/dokumentaatio/maarittelydokumentti.md)
+- [Määrittely](https:/ithub.com/Uhinho/tiralab/blob/master/dokumentaatio/maarittelydokumentti.md)
+- [Käyttöohje]()
+- [Testausdokumentti]()
+- [Toteutusdokumentti]()
 - [Viikkoraportit](https://github.com/Uhinho/tiralab/blob/master/dokumentaatio/viikkoraportit/)

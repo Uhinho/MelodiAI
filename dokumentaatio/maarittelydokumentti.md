@@ -5,17 +5,21 @@
 ## Aihe
 
 Harjoitustyön aiheena on luoda ohjelma, joka luo MIDI-tiedostoina syötettäviin harjoitusmateriaaleihin perustuvia melodioita. 
-Ohjelman output on luodusta melodiasta tehty MIDI-tiedosto, joka on mahdollista jatkojalostaa esim. studiotyöskentelyyn tarkoitetuilla mallinnusohjelmilla (Studio One, Cubase, jne.)
-MIDI-tiedostojen prosessointiin löytynee hyviä valmiita Java-kirjastoja, joita voidaan käyttää hyväksi datan muuttamiseksi käytettävään muotoon. 
+Ohjelman output on luodusta melodiasta tehty MIDI-tiedosto.
 
 ## Kieli
 
-Ohjelma tehdään Javalla.
+Java
 
 ## Algoritmit ja tietorakenteet
 
-Melodioiden luomiseen käytetään Markovin ketjuun perustuvaa algoritmia. Syötteenä toimii MIDI-tiedostot, joista saadaan sävelten järjestys helposti selville. MIDI on yleinen tiedostomuoto digitaaliselle musiikille ja näin helposti saatavilla. 
-MIDI-tiedostoista puretaan sävelten järjestys ja näin saadaan laskettua nuotin n+1 todennäköisyydet matriiseihin. 
+Melodioiden luomiseen käytetään Markovin ketjuun perustuvaa algoritmia. Syötteenä toimii MIDI-tiedostot.
+Pääasiallisena tietorakenteena toimii trie-toteutus. Trien lisäksi sovellukseen on toteutettu tietorakenteeksi dynaamisesti skaalautuva listaobjekti. 
+
+## Aika- ja tilavaativuus
+
+Trieen tallentamisen ja triestä hakemisen aikavaativuus on O(m), jossa m on lisättävän/haettavan avaimen pituus.
+Tilavaativuus on O(n*k), jossa n on solmujen määrä ja k on yksittäisen avaimen tilavaativuus. Avaimet tallennetaan kokonaislukuina, joten tilavaativuus on suhteellisen suuri. 
 
 ## Lähteet 
 

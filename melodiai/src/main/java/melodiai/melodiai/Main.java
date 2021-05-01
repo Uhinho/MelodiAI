@@ -34,19 +34,21 @@ public class Main {
         
         Trie velocityTrie = new Trie(4);
         velocityTrie.put(midiParser.getVelocities());
-         Scanner scanner = new Scanner(System.in);
 
         //noteKeyTrie.print();
-        int [] noteSeq = seq.generateSequence(1000, noteKeyTrie, 4, noteKeyTrie.getRandomRootChild());
-        int [] veloSeq = seq.generateSequence(1000, velocityTrie, 2, velocityTrie.getRandomRootChild());
-        DynamicList<Double> lengthSeq = seq.generateRhytmSequence(15, noteLengthTrie, 4, noteLengthTrie.getRandomRootChild(), 3);  
+
         
         /*
         System.out.println("Name of the file: ");
         String fileNameString = scanner.nextLine();
         mb.createMidiFile(fileNameString, noteSeq, veloSeq, lengthSeq);
         */
-        Ui ui = new Ui();
+        Ui ui = new Ui(noteKeyTrie.getRoot().getChildren());
+        
+        
+        int [] noteSeq = seq.generateSequence(1000, noteKeyTrie, 4, noteKeyTrie.getRandomRootChild());
+        int [] veloSeq = seq.generateSequence(1000, velocityTrie, 2, velocityTrie.getRandomRootChild());
+        DynamicList<Double> lengthSeq = seq.generateRhytmSequence(15, noteLengthTrie, 4, noteLengthTrie.getRandomRootChild(), 3);  
        
     }
     
