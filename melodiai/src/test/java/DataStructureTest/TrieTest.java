@@ -26,7 +26,7 @@ public class TrieTest {
     
     public TrieTest() {
         trie = new Trie(3);
-        list = new DynamicList<Integer>();
+        list = new DynamicList<>();
     }
     
     @BeforeClass

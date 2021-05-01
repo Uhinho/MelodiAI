@@ -9,7 +9,7 @@ import melodiai.datastructures.TrieNode;
  *
  * @author juho
  */
-public class Sequencer {
+public class ArraySequencer {
     
     public int[] generateSequence(int length, Trie trie, int order, int start) {
         
@@ -31,6 +31,89 @@ public class Sequencer {
         
         return list;
         
+    }
+    
+    public DynamicList<Double> generateRhytmSequence(int lengthInBars, Trie trie, int order, int start, double timeSigNumerator) {
+        double timeSigDenominator = 4;
+        
+        // Base for the note lengths
+        int[] rhytmSequence = this.generateSequence(lengthInBars * 10, trie, order, start);
+        DynamicList<Double> noteLengthsList = new DynamicList<>();
+        
+        
+        int notes = 0;
+        int bars = 0;
+        
+        double fullBar = timeSigNumerator / timeSigDenominator;
+        double availableSpaceInBar = fullBar;
+        
+        for (int i = 0; i < rhytmSequence.length; i++) {
+            if (bars == lengthInBars) {
+                break;
+            }
+            
+            double nextNoteLength = this.getNoteLength(rhytmSequence[i]);
+            
+            // check available space
+            
+            if (nextNoteLength <= availableSpaceInBar) {
+                noteLengthsList.insert(nextNoteLength);
+                notes++;
+                availableSpaceInBar -= nextNoteLength;
+                
+                if (availableSpaceInBar == 0) {
+                    bars++;
+                    availableSpaceInBar = fullBar;
+                }
+            } else {
+                double nextLength = this.findFittingNote(noteLengthsList.get(notes - 1), availableSpaceInBar, trie, timeSigNumerator);
+                
+                noteLengthsList.insert(nextLength);
+                availableSpaceInBar -= nextLength;
+                notes++;
+                
+                if (availableSpaceInBar == 0) {
+                    bars++;
+                    availableSpaceInBar = fullBar;
+                }
+            }
+            
+            
+        }
+          
+        return noteLengthsList;
+    }
+    
+    private double getNoteLength(int noteSig) {
+        double noteSigDouble = (double) noteSig;
+        
+        return (1.0 / noteSigDouble);
+    }
+    
+    private double findFittingNote(double previous, double maxLength, Trie trie, double timeSigNumerator) {
+        
+        int[] search = new int[1];
+        
+        double previousValueInInteger = timeSigNumerator / previous;
+        
+        search[0] = (int) previousValueInInteger;
+        DynamicList<TrieNode> nodes = trie.getFollowers(search);
+        
+        if (nodes == null || nodes.isEmpty()) {
+            return maxLength;
+        }
+        
+        for (int i = 0; i < nodes.size(); i++) {
+            double durationOfPossibleNote = this.getNoteLength(nodes.get(i).getNodeKey());
+            
+            if (durationOfPossibleNote <= maxLength) {
+                return durationOfPossibleNote;
+            }
+            
+        }
+        
+        
+        return maxLength;
     }
     
     /**

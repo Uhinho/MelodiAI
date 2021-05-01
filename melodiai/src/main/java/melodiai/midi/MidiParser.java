@@ -3,9 +3,6 @@ package melodiai.midi;
 import melodiai.datastructures.DynamicList;
 import java.io.File;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sound.midi.InvalidMidiDataException;
@@ -16,7 +13,6 @@ import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Track;
-import jdk.dynalink.DynamicLinker;
 
 /**
  * 
@@ -32,14 +28,13 @@ public class MidiParser {
     private final int SET_TEMPO = 0x51;
     private final int TIME_SIGNATURE = 0x58;
     private final DynamicList<Note> notesList = new DynamicList<>();
-    private double numerator = 4; // numerator of time signature
-    private double denominator = 4; // denominator of time signature
+    private int numerator = 4; // numerator of time signature
+    private int denominator = 4; // denominator of time signature
     private int resolution;
     private int tempo;
     /**
      * Parses note keys from MIDI files
      * @param files array of paths to MIDI files
-     * @return returns a list of all the note keys in given array in order of appearance
      */
     public void parseMidi(File[] files) {
         
@@ -51,7 +46,7 @@ public class MidiParser {
             try {  
                 Sequence sequence = MidiSystem.getSequence(file);
                 
-                // System.out.println(sequence.getResolution() + "   &    " + sequence.getTickLength());
+                //System.out.println(sequence.getResolution() + "   &    " + sequence.getTickLength());
 
                 int trackNumber = 0;
                 for (Track track :  sequence.getTracks()) {
@@ -119,14 +114,7 @@ public class MidiParser {
         return temp;
     }
     
-    private int toTempo(double bpm, double timeSignature) {
-        
-        bpm /= timeSignature;
-        bpm = 1 / bpm;
-        
-        return (int) (10000 * 60 * bpm);
-    }
-        
+  
     private void checkTimeSignature(MetaMessage metaMsg) {
         if (metaMsg.getType() == TIME_SIGNATURE) {
             switch(metaMsg.getData()[0]) {
@@ -146,10 +134,7 @@ public class MidiParser {
                     this.denominator = 8;
                 
             }
-        }
-        
-        this.tempo = toTempo(120, denominator);
-        
+        }     
     }
     
     /**
@@ -184,12 +169,12 @@ public class MidiParser {
             return 16;
         }
         
-        if (result >= 0.125) {
+        if (result <= 0.125) {
             return 32;
         }
+          
         
-        
-        return 32;
+        return 16;
     }
     
     public DynamicList<Integer> getNoteKeys() {

@@ -7,24 +7,18 @@ import javax.sound.midi.MetaMessage;
 import javax.sound.midi.MidiEvent;
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.MidiSystem;
+import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Sequence;
+import javax.sound.midi.Sequencer;
 import javax.sound.midi.ShortMessage;
 import javax.sound.midi.SysexMessage;
 import javax.sound.midi.Track;
+import melodiai.datastructures.DynamicList;
 
 
 public class MidiBuilder {
     
-    /*
-    Midi file requires at least the following elements: 
-        File header
-        Track header
-        4 bytes for track data (big endian)
-        Track data: metadata events (tempo), key signature, time signature etc.
-        Performance events: notes, controller changes, etc.
-        Track footer: 4 bytes
-    */
-    
+
     private final byte[] GENERAL_MIDI_SOUND_SET = new byte[] {(byte) 0xF0, 0x7E, 0x7F, 0x09, 0x01, (byte)0xF7};
     
     
@@ -40,9 +34,9 @@ public class MidiBuilder {
     }
     
     private void createTrack() throws InvalidMidiDataException {
-        ticksPerBeat = 480;
+        ticksPerBeat = 48000;
         
-        this.sequence = new Sequence(javax.sound.midi.Sequence.PPQ, ticksPerBeat);
+        this.sequence = new Sequence(javax.sound.midi.Sequence.PPQ, ticksPerBeat,1);
         this.track = this.sequence.createTrack();
     }
     
@@ -81,7 +75,7 @@ public class MidiBuilder {
     
     private void setTempo() throws InvalidMidiDataException {
         
-        int bpm = 120;
+        int bpm = 60;
         // byte[] bt = {(byte)0xFF, (byte)0x51, (byte)0x03, (byte)0x07, (byte)0xA1, (byte)0x20};
         
         byte[] tempoHex = new byte[3]; // big endian 3 bytes
@@ -132,21 +126,19 @@ public class MidiBuilder {
         this.addMidiEventToTrack(shortMsg, (long) 0);
     }
     
-    private void addNotesToTrack(int [] notesArray, int [] lengthArray, int [] velocityArray) throws InvalidMidiDataException {
+    private void addNotesToTrack(int [] notesArray, DynamicList<Double> lengthList, int [] velocityArray) throws InvalidMidiDataException {
         
         // 1 tick = 8000 microseconds (8 milliseconds)
         long tickCounter = 1;
-        boolean poly = false;
-        for (int i = 0; i < notesArray.length; i++) {
+        for (int i = 0; i < lengthList.size(); i++) {
             
             // note on
             ShortMessage sm = new ShortMessage();
             sm.setMessage(0x90, notesArray[i], velocityArray[i]);
             this.addMidiEventToTrack(sm, tickCounter);
             
-            tickCounter += this.ticksToSkip(lengthArray[i]);
+            tickCounter += (this.ticksPerBeat * lengthList.get(i));
             
-           // System.out.println(lengthArray[i] * this.ticksPerBeat);
             
             //note off
             sm = new ShortMessage();
@@ -162,15 +154,6 @@ public class MidiBuilder {
         this.addMidiEventToTrack(metaMsg, tickCounter + 19);
         
     }
-    
-    private long ticksToSkip(int noteLength) {
-        double noteDenomerator = (double) noteLength;
-        double noteKeyValue = 4.0 / noteDenomerator;
-        
-        double ticksToSkip = this.ticksPerBeat;
-        
-        return (long) ticksToSkip;
-    }
 
     private void writeMIDItoFile(String name) throws IOException {
         File file = new File("output/" + name + ".mid");
@@ -178,7 +161,7 @@ public class MidiBuilder {
     }
     
     
-    public void createMidiFile(String name, int [] notesSequence, int [] velocitySequence, int [] noteLengthSequence) throws InvalidMidiDataException {
+    public void createMidiFile(String name, int [] notesSequence, int [] velocitySequence, DynamicList<Double> noteLengthSequence) throws InvalidMidiDataException {
         
         
         try {
@@ -208,6 +191,14 @@ public class MidiBuilder {
         
         
     }
-
- 
+    
+    public void play() throws MidiUnavailableException, InvalidMidiDataException, InterruptedException {
+        Sequencer sequencer = MidiSystem.getSequencer();
+        sequencer.open();
+        
+        sequencer.setSequence(this.sequence);
+        sequencer.setTempoInBPM(20f);
+        sequencer.setTempoFactor(1.0f);
+        sequencer.start();
+    }
 }

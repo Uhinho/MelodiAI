@@ -1,33 +1,31 @@
 package melodiai.melodiai;
 
 import java.io.File;
+import java.util.Scanner;
 import javax.sound.midi.InvalidMidiDataException;
-import melodiai.ai.Sequencer;
+import javax.sound.midi.MidiUnavailableException;
+import melodiai.ai.ArraySequencer;
 import melodiai.datastructures.DynamicList;
 import melodiai.datastructures.Trie;
-import melodiai.datastructures.TrieNode;
 import melodiai.midi.MidiBuilder;
 import melodiai.midi.MidiParser;
-import melodiai.midi.Note;
+import melodiai.ui.Ui;
 
 public class Main {
     
     
 
 
-    public static void main(String[] args) throws InvalidMidiDataException {
+    public static void main(String[] args) throws InvalidMidiDataException, MidiUnavailableException, InterruptedException {
         
         MidiParser midiParser = new MidiParser();
-        Sequencer seq = new Sequencer();
+        ArraySequencer seq = new ArraySequencer();
         MidiBuilder mb = new MidiBuilder();
-        File folder = new File("Midifiles/Cmajor/");
+        File folder = new File("Midifiles/Bach/");
         File[] listOfFiles = folder.listFiles();
         
         midiParser.parseMidi(listOfFiles);
-        
-        //midiParser.getNoteLengths().print();
-        
-        
+          
         Trie noteKeyTrie = new Trie(4);
         noteKeyTrie.put(midiParser.getNoteKeys());
         
@@ -36,16 +34,20 @@ public class Main {
         
         Trie velocityTrie = new Trie(4);
         velocityTrie.put(midiParser.getVelocities());
-        
+         Scanner scanner = new Scanner(System.in);
 
-           
-        int [] noteSeq = seq.generateSequence(500, noteKeyTrie, 3, noteKeyTrie.getRandomRootChild());
-        int [] veloSeq = seq.generateSequence(500, velocityTrie, 3, velocityTrie.getRandomRootChild());
-        int [] lengthSeq = seq.generateSequence(500, noteLengthTrie, 3, noteLengthTrie.getRandomRootChild()); 
+        //noteKeyTrie.print();
+        int [] noteSeq = seq.generateSequence(1000, noteKeyTrie, 4, noteKeyTrie.getRandomRootChild());
+        int [] veloSeq = seq.generateSequence(1000, velocityTrie, 2, velocityTrie.getRandomRootChild());
+        DynamicList<Double> lengthSeq = seq.generateRhytmSequence(15, noteLengthTrie, 4, noteLengthTrie.getRandomRootChild(), 3);  
         
-        mb.createMidiFile("Uus", noteSeq, veloSeq, lengthSeq);
-
-        
+        /*
+        System.out.println("Name of the file: ");
+        String fileNameString = scanner.nextLine();
+        mb.createMidiFile(fileNameString, noteSeq, veloSeq, lengthSeq);
+        */
+        Ui ui = new Ui();
+       
     }
     
 }
