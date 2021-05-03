@@ -43,9 +43,9 @@ public class Main {
         String fileNameString = scanner.nextLine();
         mb.createMidiFile(fileNameString, noteSeq, veloSeq, lengthSeq);
         */
-        Ui ui = new Ui(noteKeyTrie.getRoot().getChildren());
+        //Ui ui = new Ui(noteKeyTrie.getRoot().getChildren());
         
-        
+        noteKeyTrie.print();
         int [] noteSeq = seq.generateSequence(1000, noteKeyTrie, 4, noteKeyTrie.getRandomRootChild());
         int [] veloSeq = seq.generateSequence(1000, velocityTrie, 2, velocityTrie.getRandomRootChild());
         DynamicList<Double> lengthSeq = seq.generateRhytmSequence(15, noteLengthTrie, 4, noteLengthTrie.getRandomRootChild(), 3);  
