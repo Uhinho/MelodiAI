@@ -24,19 +24,19 @@ Opetusdataan pohjautuvien datasekvenssien luomiseen tarkoitettu luokka.
 
 - **generateSequence**
 
-⋅⋅⋅ Palauttaa kokonaislukujonona Markovin ketjuna lasketun sekvenssin halutulla asteella.
+⋅⋅⋅Palauttaa kokonaislukujonona Markovin ketjuna lasketun sekvenssin halutulla asteella. </p>
 
 - **generateRhytmSequence**
 
-⋅⋅⋅ Palauttaa listaobjektin joka sisältää opetusmateriaaliin pohjautuen nuottien pituuksia sovitettuna haluttuun tahtilajiin.
+⋅⋅⋅Palauttaa listaobjektin joka sisältää opetusmateriaaliin pohjautuen nuottien pituuksia sovitettuna haluttuun tahtilajiin.
 
 - **getNext**
 
-⋅⋅⋅ Määrittää sekvenssin seuraavan nuotin
+⋅⋅⋅Määrittää sekvenssin seuraavan nuotin
 
 - **getWeightedRandom
 
-⋅⋅⋅ Arpoo arvon avaimien esiintyvyysmäärällä painotetetusti 
+⋅⋅⋅Arpoo arvon avaimien esiintyvyysmäärällä painotetetusti 
 
 ## Midi
 
