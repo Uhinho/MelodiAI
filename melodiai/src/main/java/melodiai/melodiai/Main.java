@@ -1,7 +1,6 @@
 package melodiai.melodiai;
 
 import java.io.File;
-import java.util.Scanner;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
 import melodiai.ai.ArraySequencer;
@@ -35,17 +34,10 @@ public class Main {
         Trie velocityTrie = new Trie(4);
         velocityTrie.put(midiParser.getVelocities());
 
-        //noteKeyTrie.print();
-
-        
-        /*
-        System.out.println("Name of the file: ");
-        String fileNameString = scanner.nextLine();
-        mb.createMidiFile(fileNameString, noteSeq, veloSeq, lengthSeq);
-        */
         //Ui ui = new Ui(noteKeyTrie.getRoot().getChildren());
         
         noteKeyTrie.print();
+        noteLengthTrie.print();
         int [] noteSeq = seq.generateSequence(1000, noteKeyTrie, 4, noteKeyTrie.getRandomRootChild());
         int [] veloSeq = seq.generateSequence(1000, velocityTrie, 2, velocityTrie.getRandomRootChild());
         DynamicList<Double> lengthSeq = seq.generateRhytmSequence(15, noteLengthTrie, 4, noteLengthTrie.getRandomRootChild(), 3);  

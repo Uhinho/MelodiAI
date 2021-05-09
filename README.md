@@ -4,8 +4,8 @@ Tämän harjoitustyön tarkoituksena on rakentaa sovellus, joka säveltää melo
 
 ## Dokumentaatio
 
-- [Määrittely](https:/ithub.com/Uhinho/tiralab/blob/master/dokumentaatio/maarittelydokumentti.md)
+- [Määrittely](https://github.com/Uhinho/tiralab/blob/master/dokumentaatio/maarittelydokumentti.md)
 - [Käyttöohje]()
 - [Testausdokumentti]()
-- [Toteutusdokumentti]()
+- [Toteutusdokumentti](https://github.com/Uhinho/tiralab/blob/master/dokumentaatio/toteutusdokumentti.md)
 - [Viikkoraportit](https://github.com/Uhinho/tiralab/blob/master/dokumentaatio/viikkoraportit/)

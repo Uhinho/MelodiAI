@@ -94,6 +94,8 @@ public class ArraySequencer {
         
         int[] search = new int[1];
         
+        
+        // Note lengths are relative to quarter notes and stored as integers. Conversion is made here.
         double previousValueInInteger = timeSigNumerator / previous;
         
         search[0] = (int) previousValueInInteger;
@@ -106,6 +108,7 @@ public class ArraySequencer {
         for (int i = 0; i < nodes.size(); i++) {
             double durationOfPossibleNote = this.getNoteLength(nodes.get(i).getNodeKey());
             
+            // If returned note would be too long to fit the bar, max length fitting to the bar is returned as default.
             if (durationOfPossibleNote <= maxLength) {
                 return durationOfPossibleNote;
             }

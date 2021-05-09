@@ -1,9 +1,6 @@
 
 package melodiai.datastructures;
 
-
-
-
 public class Trie {
     
     private TrieNode root;
@@ -51,8 +48,7 @@ public class Trie {
             root.getFollowers().insert(newNode);
         } else {
             this.updateNode(root, nodeKey);
-        }
-        
+        }   
     }
     
     private void updateNode(TrieNode root, int note) {
@@ -67,23 +63,18 @@ public class Trie {
         TrieNode current = root;
         
         for (int i = 0; i < key.length; i++) {
-            int note = key[i];
-            
-            TrieNode node = current.getChildren()[note];
-            
+            int note = key[i];          
+            TrieNode node = current.getChildren()[note];  
             if (node == null) {
                 return null;
             }
-            
             current = node;
-        }
-        
+        } 
         return current.getFollowers();
     }
     
     public void printFollowers(int[] key) {
         DynamicList dl = this.getFollowers(key);
-        
         for (int i = 0; i < dl.size(); i++) {
             System.out.println(dl.get(i).toString());
         }
@@ -97,19 +88,16 @@ public class Trie {
     public boolean includesNoteSequence(int[] key) {
         int level;
         int length = key.length;
-        int noteKey;
-        
+        int noteKey;   
         TrieNode pointer = root;
         
         for (level = 0; level < length; level++) {
             noteKey = key[level];        
             if (pointer.getChildren()[noteKey] == null) {
                 return false;
-            }
-            
+            }   
             pointer = pointer.getChildren()[noteKey];
-        }
-        
+        }     
         return (pointer != null &&  level == order);
     }
     
@@ -120,8 +108,7 @@ public class Trie {
      * @param offset Offset for the recursion
      */
     private void printTrie(TrieNode node, int offset) {
-        
-        
+           
         for (TrieNode child: node.getChildren()) {
             if (child != null) {
                 System.out.println(child.toStringWithOffset(offset) + "(" + child.getAppearances() + ")");
@@ -146,11 +133,8 @@ public class Trie {
         
         while (this.root.getChildren()[random] == null){
             random = (int) (Math.random() * this.root.getChildren().length);
-        }
-        
+        } 
         return this.root.getChildren()[random].getNodeKey();
     }
-    
- 
 }
 
