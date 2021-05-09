@@ -5,19 +5,14 @@ import melodiai.datastructures.DynamicList;
 import melodiai.datastructures.Trie;
 import melodiai.datastructures.TrieNode;
 
-/**
- *
- * @author juho
- */
 public class ArraySequencer {
     
     public int[] generateSequence(int length, Trie trie, int order, int start) {
         
-        int[] list = new int[length];
-        
+        int[] list = new int[length];   
         list[0] = start;
-        
         int index = 0;
+        
         while (index < order - 1) {
             int next = this.getNext(list, trie, 0, index);
             list[index + 1] = next;
@@ -27,10 +22,8 @@ public class ArraySequencer {
         for(int i = 0; i < length - order; i++) {
             int next = getNext(list, trie, i, i + order - 1);
             list[i + order] = next;
-        }
-        
-        return list;
-        
+        }      
+        return list;   
     }
     
     public DynamicList<Double> generateRhytmSequence(int lengthInBars, Trie trie, int order, int start, double timeSigNumerator) {
@@ -40,22 +33,18 @@ public class ArraySequencer {
         int[] rhytmSequence = this.generateSequence(lengthInBars * 10, trie, order, start);
         DynamicList<Double> noteLengthsList = new DynamicList<>();
         
-        
         int notes = 0;
-        int bars = 0;
-        
+        int bars = 0;  
         double fullBar = timeSigNumerator / timeSigDenominator;
         double availableSpaceInBar = fullBar;
         
         for (int i = 0; i < rhytmSequence.length; i++) {
             if (bars == lengthInBars) {
                 break;
-            }
-            
+            }    
             double nextNoteLength = this.getNoteLength(rhytmSequence[i]);
             
-            // check available space
-            
+            // check available space  
             if (nextNoteLength <= availableSpaceInBar) {
                 noteLengthsList.insert(nextNoteLength);
                 notes++;
@@ -66,8 +55,7 @@ public class ArraySequencer {
                     availableSpaceInBar = fullBar;
                 }
             } else {
-                double nextLength = this.findFittingNote(noteLengthsList.get(notes - 1), availableSpaceInBar, trie, timeSigNumerator);
-                
+                double nextLength = this.findFittingNote(noteLengthsList.get(notes - 1), availableSpaceInBar, trie, timeSigNumerator);        
                 noteLengthsList.insert(nextLength);
                 availableSpaceInBar -= nextLength;
                 notes++;
@@ -77,16 +65,17 @@ public class ArraySequencer {
                     availableSpaceInBar = fullBar;
                 }
             }
-            
-            
-        }
-          
+        }        
         return noteLengthsList;
     }
     
+    /**
+     * 
+     * @param noteSig note signature (1 = whole note, 2 = half note, 4 = quarter note, ...)
+     * @return converted value from signature to double length
+     */
     private double getNoteLength(int noteSig) {
-        double noteSigDouble = (double) noteSig;
-        
+        double noteSigDouble = (double) noteSig;     
         return (1.0 / noteSigDouble);
     }
     
@@ -94,10 +83,8 @@ public class ArraySequencer {
         
         int[] search = new int[1];
         
-        
         // Note lengths are relative to quarter notes and stored as integers. Conversion is made here.
-        double previousValueInInteger = timeSigNumerator / previous;
-        
+        double previousValueInInteger = timeSigNumerator / previous;       
         search[0] = (int) previousValueInInteger;
         DynamicList<TrieNode> nodes = trie.getFollowers(search);
         
@@ -111,11 +98,8 @@ public class ArraySequencer {
             // If returned note would be too long to fit the bar, max length fitting to the bar is returned as default.
             if (durationOfPossibleNote <= maxLength) {
                 return durationOfPossibleNote;
-            }
-            
+            }       
         }
-        
-        
         return maxLength;
     }
     
@@ -129,8 +113,7 @@ public class ArraySequencer {
     private int getNext(int[] currentSequence, Trie trie, int from, int to) {
         
         int[] key =  new int[to + 1 - from];
-        System.arraycopy(currentSequence, from, key, 0, (to + 1 - from));
-            
+        System.arraycopy(currentSequence, from, key, 0, (to + 1 - from));        
         DynamicList<TrieNode> followingNotes = trie.getFollowers(key);
         
         // If key doesn't exist in trie, find followers of shorter key
@@ -159,12 +142,10 @@ public class ArraySequencer {
     
     private int countTotalAppearances(DynamicList<TrieNode> nodeList) {
         
-        int count = 0;
-        
+        int count = 0;      
         for(TrieNode node: nodeList) {
             count += node.getAppearances();
-        }
-        
+        }      
         return count;
     }
     
@@ -176,8 +157,7 @@ public class ArraySequencer {
     private TrieNode getWeightedRandom(DynamicList<TrieNode> nodeList) {
         
         int totalCount = this.countTotalAppearances(nodeList);
-        double randomNum = Math.random() * totalCount;
-        
+        double randomNum = Math.random() * totalCount;   
         double countAppearances = 0.0;
         
         for (TrieNode node: nodeList) {
@@ -187,6 +167,5 @@ public class ArraySequencer {
             }
         }
         return null; 
-    }
-    
+    }   
 }

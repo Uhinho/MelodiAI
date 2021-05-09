@@ -73,6 +73,4 @@ public class TrieNode {
     public int getAppearances() {
         return this.appears;
     }
-    
-
 }

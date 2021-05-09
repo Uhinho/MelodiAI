@@ -30,8 +30,6 @@ public class Note {
     public void setNoteLength(int noteLength) {
         this.noteLength = noteLength;
     }
-    
-    
 
     @Override
     public String toString() {
