@@ -22,21 +22,13 @@ Javan ArrayListiä mukaileva dynaamisesti kasvava lista.
 
 Opetusdataan pohjautuvien datasekvenssien luomiseen tarkoitettu luokka.
 
-- **generateSequence**
+- **generateSequence:** Palauttaa kokonaislukujonona Markovin ketjuna lasketun sekvenssin halutulla asteella. </p>
 
-⋅⋅⋅Palauttaa kokonaislukujonona Markovin ketjuna lasketun sekvenssin halutulla asteella. </p>
+- **generateRhytmSequence:** Palauttaa listaobjektin joka sisältää opetusmateriaaliin pohjautuen nuottien pituuksia sovitettuna haluttuun tahtilajiin.
 
-- **generateRhytmSequence**
+- **getNext:** Määrittää sekvenssin seuraavan nuotin
 
-⋅⋅⋅Palauttaa listaobjektin joka sisältää opetusmateriaaliin pohjautuen nuottien pituuksia sovitettuna haluttuun tahtilajiin.
-
-- **getNext**
-
-⋅⋅⋅Määrittää sekvenssin seuraavan nuotin
-
-- **getWeightedRandom
-
-⋅⋅⋅Arpoo arvon avaimien esiintyvyysmäärällä painotetetusti 
+- **getWeightedRandom:** Arpoo arvon avaimien esiintyvyysmäärällä painotetetusti 
 
 ## Midi
 
