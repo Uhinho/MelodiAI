@@ -19,15 +19,17 @@ import melodiai.datastructures.TrieNode;
 public class Ui extends JFrame {
     static Ui ui;
     
-    JPanel pnPanel0;
-    JLabel lbL1;
+    JPanel panel;
+    JLabel lbl1;
     JList lsStartNoteList;
-    JTextField tfText0;
-    JLabel lbL2;
+    JTextField lengthInBarsTextBox;
+    JLabel lbl2;
     JComboBox cmbTimeSig;
-    JLabel lbL3;
+    JComboBox cmbMarkovOrder;
+    JLabel lbl3;
     JList lsStyleList;
-    JLabel lbL4;
+    JLabel lbl4;
+    JLabel lbl5;
     JButton generateBtn;
     
     
@@ -35,13 +37,13 @@ public class Ui extends JFrame {
         
         super( "MelodiAI" );
 
-        pnPanel0 = new JPanel();
-        pnPanel0.setBorder( BorderFactory.createTitledBorder( "" ) );
+        panel = new JPanel();
+        panel.setBorder( BorderFactory.createTitledBorder( "" ) );
         GridBagLayout gbPanel0 = new GridBagLayout();
         GridBagConstraints gbcPanel0 = new GridBagConstraints();
-        pnPanel0.setLayout( gbPanel0 );
+        panel.setLayout( gbPanel0 );
 
-        lbL1 = new JLabel( "Starting note"  );
+        lbl1 = new JLabel( "Starting note"  );
         gbcPanel0.gridx = 1;
         gbcPanel0.gridy = 2;
         gbcPanel0.gridwidth = 1;
@@ -51,8 +53,8 @@ public class Ui extends JFrame {
         gbcPanel0.weighty = 1;
         gbcPanel0.anchor = GridBagConstraints.NORTH;
         gbcPanel0.insets = new Insets( 0,10,0,10 );
-        gbPanel0.setConstraints( lbL1, gbcPanel0 );
-        pnPanel0.add( lbL1 );
+        gbPanel0.setConstraints(lbl1, gbcPanel0 );
+        panel.add(lbl1 );
 
         String []dataStartNoteList = this.startingNotesToStringArray(startingNotes);
         lsStartNoteList = new JList( dataStartNoteList );
@@ -67,9 +69,9 @@ public class Ui extends JFrame {
         gbcPanel0.anchor = GridBagConstraints.NORTH;
         gbcPanel0.insets = new Insets( 5,10,5,10 );
         gbPanel0.setConstraints( scpStartNoteList, gbcPanel0 );
-        pnPanel0.add( scpStartNoteList );
+        panel.add( scpStartNoteList );
 
-        tfText0 = new JTextField( );
+        lengthInBarsTextBox = new JTextField( );
         gbcPanel0.gridx = 1;
         gbcPanel0.gridy = 15;
         gbcPanel0.gridwidth = 1;
@@ -79,10 +81,10 @@ public class Ui extends JFrame {
         gbcPanel0.weighty = 0;
         gbcPanel0.anchor = GridBagConstraints.NORTH;
         gbcPanel0.insets = new Insets( 0,10,0,10 );
-        gbPanel0.setConstraints( tfText0, gbcPanel0 );
-        pnPanel0.add( tfText0 );
+        gbPanel0.setConstraints(lengthInBarsTextBox, gbcPanel0 );
+        panel.add(lengthInBarsTextBox );
 
-        lbL2 = new JLabel( "Length in bars"  );
+        lbl2 = new JLabel( "Length in bars"  );
         gbcPanel0.gridx = 1;
         gbcPanel0.gridy = 14;
         gbcPanel0.gridwidth = 1;
@@ -92,8 +94,8 @@ public class Ui extends JFrame {
         gbcPanel0.weighty = 1;
         gbcPanel0.anchor = GridBagConstraints.NORTH;
         gbcPanel0.insets = new Insets( 0,10,0,0 );
-        gbPanel0.setConstraints( lbL2, gbcPanel0 );
-        pnPanel0.add( lbL2 );
+        gbPanel0.setConstraints(lbl2, gbcPanel0 );
+        panel.add(lbl2 );
 
         String []dataTimeSignatures = {"4/4", "3/4"};
         cmbTimeSig = new JComboBox( dataTimeSignatures );
@@ -107,9 +109,9 @@ public class Ui extends JFrame {
         gbcPanel0.anchor = GridBagConstraints.NORTH;
         gbcPanel0.insets = new Insets( 0,10,20,10 );
         gbPanel0.setConstraints(cmbTimeSig, gbcPanel0 );
-        pnPanel0.add(cmbTimeSig );
+        panel.add(cmbTimeSig );
 
-        lbL3 = new JLabel( "Time Signature"  );
+        lbl3 = new JLabel(  "Time Signature"  );
         gbcPanel0.gridx = 1;
         gbcPanel0.gridy = 17;
         gbcPanel0.gridwidth = 1;
@@ -119,8 +121,8 @@ public class Ui extends JFrame {
         gbcPanel0.weighty = 1;
         gbcPanel0.anchor = GridBagConstraints.NORTH;
         gbcPanel0.insets = new Insets( 0,10,0,10 );
-        gbPanel0.setConstraints( lbL3, gbcPanel0 );
-        pnPanel0.add( lbL3 );
+        gbPanel0.setConstraints(lbl3, gbcPanel0 );
+        panel.add(lbl3 );
 
         String []dataStyleList = { "Bach", "Avici", "Mozart"};
         lsStyleList = new JList( dataStyleList );
@@ -134,9 +136,9 @@ public class Ui extends JFrame {
         gbcPanel0.anchor = GridBagConstraints.NORTH;
         gbcPanel0.insets = new Insets( 5,10,5,10 );
         gbPanel0.setConstraints( lsStyleList, gbcPanel0 );
-        pnPanel0.add( lsStyleList );
+        panel.add( lsStyleList );
 
-        lbL4 = new JLabel( "Style"  );
+        lbl4 = new JLabel( "Style"  );
         gbcPanel0.gridx = 5;
         gbcPanel0.gridy = 2;
         gbcPanel0.gridwidth = 6;
@@ -146,12 +148,41 @@ public class Ui extends JFrame {
         gbcPanel0.weighty = 1;
         gbcPanel0.anchor = GridBagConstraints.NORTH;
         gbcPanel0.insets = new Insets( 0,10,0,0 );
-        gbPanel0.setConstraints( lbL4, gbcPanel0 );
-        pnPanel0.add( lbL4 );
+        gbPanel0.setConstraints(lbl4, gbcPanel0 );
+        panel.add(lbl4 );
+        
+        lbl5 = new JLabel(  "Markov order"  );
+        gbcPanel0.gridx = 10;
+        gbcPanel0.gridy = 14;
+        gbcPanel0.gridwidth = 1;
+        gbcPanel0.gridheight = 1;
+        gbcPanel0.fill = GridBagConstraints.BOTH;
+        gbcPanel0.weightx = 1;
+        gbcPanel0.weighty = 1;
+        gbcPanel0.anchor = GridBagConstraints.NORTH;
+        gbcPanel0.insets = new Insets( 0,10,0,10 );
+        gbPanel0.setConstraints(lbl5, gbcPanel0 );
+        panel.add( lbl5 );
+        
+        String []dataMarkovOrders = {"2","3","4","5","6"};
+        cmbMarkovOrder = new JComboBox( dataMarkovOrders );
+        gbcPanel0.gridx = 10;
+        gbcPanel0.gridy = 15;
+        gbcPanel0.gridwidth = 1;
+        gbcPanel0.gridheight = 1;
+        gbcPanel0.fill = GridBagConstraints.BOTH;
+        gbcPanel0.weightx = 1;
+        gbcPanel0.weighty = 0;
+        gbcPanel0.anchor = GridBagConstraints.NORTH;
+        gbcPanel0.insets = new Insets( 0,10,20,10 );
+        gbPanel0.setConstraints(cmbMarkovOrder, gbcPanel0 );
+        panel.add(cmbMarkovOrder );
+        
+        
 
         generateBtn = new JButton( "Generate"  );
         gbcPanel0.gridx = 5;
-        gbcPanel0.gridy = 14;
+        gbcPanel0.gridy = 30;
         gbcPanel0.gridwidth = 6;
         gbcPanel0.gridheight = 2;
         gbcPanel0.fill = GridBagConstraints.BOTH;
@@ -160,7 +191,7 @@ public class Ui extends JFrame {
         gbcPanel0.anchor = GridBagConstraints.NORTH;
         gbcPanel0.insets = new Insets( 10,10,10,10 );
         gbPanel0.setConstraints(generateBtn, gbcPanel0 );
-        pnPanel0.add(generateBtn );
+        panel.add(generateBtn );
         generateBtn.addActionListener(e -> {
             
         
@@ -168,7 +199,7 @@ public class Ui extends JFrame {
 
         setDefaultCloseOperation( EXIT_ON_CLOSE );
 
-        setContentPane( pnPanel0 );
+        setContentPane(panel );
         pack();
         setVisible( true );
      }
@@ -196,11 +227,16 @@ public class Ui extends JFrame {
     }
     
     private String getNoteName(int noteNumber){
-        noteNumber -= 21;
-        String[] notes = new String[] {"A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"};
-        int octave = noteNumber / 12 + 1;
-        String name = notes[noteNumber % 12];
-        return name + octave;
+        
+        if (noteNumber > 0) {
+          noteNumber -= 21;
+            String[] notes = new String[] {"A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"};
+            int octave = noteNumber / 12 + 1;
+            String name = notes[noteNumber % 12];
+            return name + octave;  
+        }
+        
+        return "";
     }
     
 }
