@@ -98,7 +98,7 @@ public class MidiBuilder {
         MetaMessage metaMsg = new MetaMessage();
         metaMsg.setMessage(0x03, name.getBytes(), name.length());
         
-        this.addMidiEventToTrack(metaMsg,(long) 0);
+        this.addMidiEventToTrack(metaMsg, 0);
     }
     
     private void setOmniMode() throws InvalidMidiDataException {
@@ -106,7 +106,7 @@ public class MidiBuilder {
         
         ShortMessage shortMsg = new ShortMessage();
         shortMsg.setMessage(0xB0, 0x7D, 0x00);
-        this.addMidiEventToTrack(shortMsg, (long) 0);
+        this.addMidiEventToTrack(shortMsg, 0);
     }
     
     private void setPolyOn() throws InvalidMidiDataException {
@@ -114,7 +114,7 @@ public class MidiBuilder {
         ShortMessage shortMsg = new ShortMessage();
         shortMsg.setMessage(0xB0, 0x7F, 0x00);
         
-        this.addMidiEventToTrack(shortMsg, (long) 0);
+        this.addMidiEventToTrack(shortMsg, 0);
     }
     
     private void setInstrument() throws InvalidMidiDataException {
@@ -123,7 +123,7 @@ public class MidiBuilder {
         // By default set to piano 0x00
         shortMsg.setMessage(0xC0, 0x00, 0x00);
         
-        this.addMidiEventToTrack(shortMsg, (long) 0);
+        this.addMidiEventToTrack(shortMsg, 0);
     }
     
     private void addNotesToTrack(int [] notesArray, DynamicList<Double> lengthList, int [] velocityArray) throws InvalidMidiDataException {
@@ -156,6 +156,10 @@ public class MidiBuilder {
     }
 
     private void writeMIDItoFile(String name) throws IOException {
+        File outputDir = new File("output/");
+        if (! outputDir.exists()) {
+            outputDir.mkdir();
+        }
         File file = new File("output/" + name + ".mid");
         MidiSystem.write(sequence, 1, file);
     }
@@ -192,7 +196,7 @@ public class MidiBuilder {
         
     }
     
-    public void play() throws MidiUnavailableException, InvalidMidiDataException, InterruptedException {
+    public void play() throws MidiUnavailableException, InvalidMidiDataException {
         Sequencer sequencer = MidiSystem.getSequencer();
         sequencer.open();
         

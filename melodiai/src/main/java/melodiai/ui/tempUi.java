@@ -75,9 +75,8 @@ public class tempUi {
         System.out.println("Select time signature for your song: 1. 3/4 or 2. 4/4 \n");
         
         while(true) {
-            
-            int selection = Integer.valueOf(scanner.nextLine());
-            
+
+            int selection = Integer.parseInt(scanner.nextLine());
             if (selection == 1) {
                 timeSig = 3;
                 break;
@@ -110,13 +109,10 @@ public class tempUi {
         for (int i = 0; i < composers.length; i++) {
             System.out.println(i + 1 + ". " + composers[i].getName());
         }
-        
-        System.out.println("");
-        
+
         while(true) {
             
-            int composerSelection = Integer.valueOf(scanner.nextLine());
-
+            int composerSelection = Integer.parseInt(scanner.nextLine());
             if (composerSelection > 0 && composerSelection <= composers.length){
                return new File("Midifiles/" + composers[composerSelection -1].getName() + "/").listFiles(); 
             }
@@ -130,7 +126,8 @@ public class tempUi {
         while(true) {
             System.out.println("Enter desired Markov order (2-6): \n");
 
-            int order = Integer.valueOf(scanner.nextLine());
+            int order;
+            order = Integer.parseInt(scanner.nextLine());
             if (order >= 2 && order <= 6) {
                 markovOrder = order;
                 break;
@@ -144,7 +141,7 @@ public class tempUi {
         while(true) {
             System.out.println("Enter length in bars: \n");
 
-            int length = Integer.valueOf(scanner.nextLine());
+            int length = Integer.parseInt(scanner.nextLine());
             if (length > 0 && length <= 10000) {
                 lengthInBars = length;
                 break;
@@ -164,7 +161,7 @@ public class tempUi {
                 System.out.print(index + ". " + s);
             }
 
-            int selectedNote = Integer.valueOf(scanner.nextLine());
+            int selectedNote = Integer.parseInt(scanner.nextLine());
             if (selectedNote > 0 && selectedNote <= startingNotesList.length) {
                 return selectedNote ;
             }           
@@ -187,10 +184,10 @@ public class tempUi {
     
     public String[] startingNotesToStringArray(TrieNode[] nodeArray) {
         DynamicList<String> notesList = new DynamicList<>();
-        
-        for (int i = 0; i < nodeArray.length; i++) {
-            if (nodeArray[i] != null) {
-                String note = this.getNoteName(nodeArray[i].getNodeKey());
+
+        for (TrieNode trieNode : nodeArray) {
+            if (trieNode != null) {
+                String note = this.getNoteName(trieNode.getNodeKey());
                 if (!note.isBlank() && !note.isEmpty()) {
                     notesList.insert(note);
                 }
