@@ -27,3 +27,9 @@ Alle pienillä alle 500 000 kokoisilla taulukoilla ja 1-5 asteisella Markovin ke
 
 Luo checkstyle-raportti komennolla
 > mvn checkstyle:checkstyle
+
+Checkstyle raportissa ainoat virheet ja varoitukset tulevat MIDI:n vaatimista byte-muotoisista notaatioista,
+sekä parista liian pitkästä metodista, jotka voidaan lyhentää jatkokehityksessä.
+
+![](https://github.com/Uhinho/tiralab/blob/master/dokumentaatio/kuvat/checkstyle.png)
+
