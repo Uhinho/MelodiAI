@@ -12,10 +12,10 @@ Trieen lisääminen ja siitä hakeminen testattiin 100, 1000, 10000, 100000 ja 1
 Testit suoritettiin AMD Ryzen 3600-suorittimella ja 32Gt DDR4 muistilla. Silti markovin 6. asteen luominen tuotti hankaluuksia suuren tilavaatimuksensa vuoksi. 
 
 Triehen lisääminen:
-![](https://github.com/Uhinho/tiralab/blob/master/dokumentaatio/kuvat/insert.png)
+![](https://github.com/Uhinho/tiralab/blob/master/dokumentaatio/kuvat/insert.JPG)
 
 Triestä hakeminen:
-![](https://github.com/Uhinho/tiralab/blob/master/dokumentaatio/kuvat/get.png)
+![](https://github.com/Uhinho/tiralab/blob/master/dokumentaatio/kuvat/get.JPG)
 
 Ajat millisekunteina.
 
