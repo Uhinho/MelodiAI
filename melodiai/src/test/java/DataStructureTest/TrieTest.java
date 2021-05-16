@@ -6,6 +6,7 @@ package DataStructureTest;
  * and open the template in the editor.
  */
 
+import java.util.concurrent.TimeUnit;
 import melodiai.datastructures.DynamicList;
 import melodiai.datastructures.Trie;
 import org.junit.After;
@@ -72,21 +73,39 @@ public class TrieTest {
     @Test
     public void timeComplexityTest() {
         
-        int markovOrder = 4;
-        Trie testTrie = new Trie(markovOrder);
-        DynamicList<Integer> testList = new DynamicList();
+        int markovOrder = 1;
+        Trie testTrie;
+        DynamicList<Integer> testList;
+        int objects = 100;
         
-        for (int i = 0; i < 10000; i++) {
-            double randomNum = Math.random() * 599;
-            testList.insert((int) randomNum);
+        while (true) {
+            testTrie = new Trie(markovOrder);
+            testList = new DynamicList<>();
+            
+            for (int i = 0; i < objects; i++) {
+                double randomNum = Math.random() * 128;
+                testList.insert((int) randomNum);
+            }
+            
+            long start = System.nanoTime();
+            testTrie.put(testList);
+            long end = System.nanoTime();
+            System.out.println(objects + " objects with " + markovOrder + " order in " + this.printInMs(start, end));
+            objects *= 10;
+            if (markovOrder == 6 &&  objects > 1000000) {
+                break;
+            } else if (objects > 1000000){
+                objects = 100;
+                markovOrder++;
+            }
         }
-        
-        long start = System.currentTimeMillis();
-        testTrie.put(testList);
-        long end = System.currentTimeMillis();
-        
+    }
+    
+    public long printInMs(long start, long end) {
         long duration = end - start;
-        System.out.println("Put operation took " + duration + "ms");
+        long inMs = TimeUnit.MILLISECONDS.convert(duration, TimeUnit.NANOSECONDS);
+        
+        return inMs;
     }
     
     @Test
