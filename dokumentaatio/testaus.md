@@ -22,3 +22,8 @@ Triestä hakeminen:
 Ajat millisekunteina.
 
 Alle pienillä alle 500 000 kokoisilla taulukoilla ja 1-5 asteisella Markovin ketjulla toteutus toimii siis varsin jouhevasti.
+
+## CheckStyle
+
+Luo checkstyle-raportti komennolla
+> mvn checkstyle:checkstyle
