@@ -71,44 +71,6 @@ public class TrieTest {
     }
     
     @Test
-    public void timeComplexityTest() {
-        
-        int markovOrder = 1;
-        Trie testTrie;
-        DynamicList<Integer> testList;
-        int objects = 100;
-        
-        while (true) {
-            testTrie = new Trie(markovOrder);
-            testList = new DynamicList<>();
-            
-            for (int i = 0; i < objects; i++) {
-                double randomNum = Math.random() * 128;
-                testList.insert((int) randomNum);
-            }
-            
-            long start = System.nanoTime();
-            testTrie.put(testList);
-            long end = System.nanoTime();
-            System.out.println(objects + " objects with " + markovOrder + " order in " + this.printInMs(start, end));
-            objects *= 10;
-            if (markovOrder == 6 &&  objects > 1000000) {
-                break;
-            } else if (objects > 1000000){
-                objects = 100;
-                markovOrder++;
-            }
-        }
-    }
-    
-    public long printInMs(long start, long end) {
-        long duration = end - start;
-        long inMs = TimeUnit.MILLISECONDS.convert(duration, TimeUnit.NANOSECONDS);
-        
-        return inMs;
-    }
-    
-    @Test
     public void nodeHasCorrectFollowers() {
         DynamicList<Integer> list = new DynamicList<>();
         
