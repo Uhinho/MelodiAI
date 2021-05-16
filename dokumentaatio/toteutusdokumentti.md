@@ -1,5 +1,8 @@
 # Toteutus
 
+Luo javadoc dokumentti komennolla
+> mvn javadoc:javadoc
+
 ## Rakenne
 
 ## Tietorakenteet
