@@ -15,13 +15,38 @@ import melodiai.datastructures.DynamicList;
 
 public class MidiBuilder {
 
-    private final byte[] GENERAL_MIDI_SOUND_SET = new byte[]{(byte) 0xF0, 0x7E, 0x7F, 0x09, 0x01, (byte) 0xF7};
+    /**
+     * General MIDI sound set defaulted.
+     */
+    private final byte[] GENERAL_MIDI_SOUND_SET = new byte[]{
+        (byte) 0xF0,
+        0x7E,
+        0x7F,
+        0x09,
+        0x01,
+        (byte) 0xF7
+    };
 
+    /**
+     * @param track midi trak
+     */
     private Track track;
+    /**
+     * @param sysex sysex message
+     */
     private SysexMessage sysex;
+    /**
+     * @param sequence sequence of MIDI events
+     */
     private Sequence sequence;
+    /**
+     * @param ticksPerBeat amount of microsecond ticks per beat
+     */
     private int ticksPerBeat;
 
+    /**
+     * Constructor for MIDI builder.
+     */
     public MidiBuilder() {
         this.track = null;
         this.sysex = new SysexMessage();
@@ -30,50 +55,43 @@ public class MidiBuilder {
     private void createTrack() throws InvalidMidiDataException {
         ticksPerBeat = 48000;
 
-        this.sequence = new Sequence(javax.sound.midi.Sequence.PPQ, ticksPerBeat, 1);
+        this.sequence = new Sequence(
+                javax.sound.midi.Sequence.PPQ,
+                ticksPerBeat,
+                1
+        );
+
         this.track = this.sequence.createTrack();
     }
 
     private void setGeneralMidiSysEx() throws InvalidMidiDataException {
         if (this.sysex != null) {
-            this.sysex.setMessage(GENERAL_MIDI_SOUND_SET, GENERAL_MIDI_SOUND_SET.length);
+            this.sysex.setMessage(
+                    GENERAL_MIDI_SOUND_SET,
+                    GENERAL_MIDI_SOUND_SET.length
+            );
         }
     }
 
-    private void addMidiEventToTrack(MidiMessage midiMessage, long tick) {
+    private void addMidiEventToTrack(
+            final MidiMessage midiMessage,
+            final long tick) {
 
         MidiEvent midiEvent = new MidiEvent(midiMessage, tick);
         this.track.add(midiEvent);
 
     }
 
-    /*  
-        This message consists of six bytes of data.
-        The first byte is the status byte and has a hexadecimal value of 0xFF, which means that this is a meta message.
-        The second byte is the meta message type 0x51 and signifies that this is a set tempo message.
-        The third byte has the value 0x03, which means that there are three bytes remaining.
-        The remaining three bytes carry the number of microseconds per quarter note.
-    
-    
-        The status byte 0xFF shows that this is a meta message. 
-        The second byte is the meta type 0x51 and signifies that this is a set tempo meta message. 
-        The third byte is 3, which means that there are three remaining bytes.
-        These three bytes form the hexadecimal value 0x07A120 (500000 decimal), 
-        which means that there are 500,000 microseconds per quarter note.
-    
-        Since there are 60,000,000 microseconds per minute, the message above translates to: 
-        set the tempo to 60,000,000 / 500,000 = 120 quarter notes per minute (120 beats per minute).
-    
+    /*
         IF TEMPO IS NOT SET THE DEFAULT IS 120BPM
      */
     private void setTempo() throws InvalidMidiDataException {
 
         int bpm = 60;
-        // byte[] bt = {(byte)0xFF, (byte)0x51, (byte)0x03, (byte)0x07, (byte)0xA1, (byte)0x20};
-
         byte[] tempoHex = new byte[3]; // big endian 3 bytes
 
-        // 60 000 000 microseconds in minute. Tempo = amt of 1/4 notes per minute
+        // 60 000 000 microseconds in minute.
+        //Tempo = amt of 1/4 notes per minute
         int tempo = 60000000 / bpm;
 
         tempoHex[0] = (byte) ((tempo >> 16) & 0xFF);
@@ -84,7 +102,7 @@ public class MidiBuilder {
         metaMsg.setMessage(0x51, tempoHex, tempoHex.length);
     }
 
-    private void setTrackName(String name) throws InvalidMidiDataException {
+    private void setTrackName(final String name) throws InvalidMidiDataException {
 
         MetaMessage metaMsg = new MetaMessage();
         metaMsg.setMessage(0x03, name.getBytes(), name.length());
@@ -117,7 +135,11 @@ public class MidiBuilder {
         this.addMidiEventToTrack(shortMsg, (long) 0);
     }
 
-    private void addNotesToTrack(int[] notesArray, DynamicList<Double> lengthList, int[] velocityArray) throws InvalidMidiDataException {
+    private void addNotesToTrack(
+            final int[] notesArray,
+            final DynamicList<Double> lengthList,
+            final int[] velocityArray)
+            throws InvalidMidiDataException {
 
         // 1 tick = 8000 microseconds (8 milliseconds)
         long tickCounter = 1;
@@ -140,12 +162,10 @@ public class MidiBuilder {
         MetaMessage metaMsg = new MetaMessage();
         byte[] endArray = new byte[]{};
         metaMsg.setMessage(0x2F, endArray, 0);
-
         this.addMidiEventToTrack(metaMsg, tickCounter + 19);
-
     }
 
-    private void writeMIDItoFile(String name) throws IOException {
+    private void writeMIDItoFile(final String name) throws IOException {
         File pathToOutput = new File("output/");
         if (!pathToOutput.exists()) {
             pathToOutput.mkdir();
@@ -154,29 +174,37 @@ public class MidiBuilder {
         MidiSystem.write(sequence, 1, file);
     }
 
-    public void createMidiFile(String name, int[] notesSequence, int[] velocitySequence, DynamicList<Double> noteLengthSequence) throws InvalidMidiDataException {
+    /**
+     * Create midi file.
+     *
+     * @param name name of the file
+     * @param notesSequence sequence of notes
+     * @param velocitySequence sequence of note velocities
+     * @param noteLengthSequence sequence of note lengths
+     * @throws InvalidMidiDataException
+     */
+    public void createMidiFile(
+            final String name,
+            final int[] notesSequence,
+            final int[] velocitySequence,
+            final DynamicList<Double> noteLengthSequence)
+            throws InvalidMidiDataException {
 
         try {
-
             this.createTrack();
             this.setGeneralMidiSysEx();
-
             this.addMidiEventToTrack(sysex, 0);
-
             this.setTempo();
-
             this.setTrackName("Test track");
-
             this.setOmniMode();
-
             this.setPolyOn();
-
             this.setInstrument();
-
-            this.addNotesToTrack(notesSequence, noteLengthSequence, velocitySequence);
-
+            this.addNotesToTrack(
+                    notesSequence,
+                    noteLengthSequence,
+                    velocitySequence
+            );
             this.writeMIDItoFile(name);
-
         } catch (IOException | InvalidMidiDataException e) {
             System.out.println(e.toString());
         }

@@ -14,19 +14,28 @@ import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Track;
 
 /**
+ * Object for parsing MIDI files to byte data.
  *
  * @author juho
  *
- * Object for parsing MIDI files to byte data
  */
 public class MidiParser {
 
+    /**
+     * @param NOTE_OFF MIDI event value for note off event
+     */
     private final int NOTE_OFF = 0x80;
+    /**
+     * @param notesList list for unfinished notes
+     */
     private final DynamicList<Note> notesList = new DynamicList<>();
+    /**
+     * @param resolution time resolution for the midi file (amt of ticks per beat)
+     */
     private int resolution;
 
     /**
-     * Parses note keys from MIDI files
+     * Parses note keys from MIDI files.
      *
      * @param files array of paths to MIDI files
      */
@@ -57,7 +66,6 @@ public class MidiParser {
                                     if (unfinishedNote.equals(temporary)) {
                                         stillPlaying.remove(j);
                                         unfinishedNote.endNote((int) event.getTick());
-
                                         unfinishedNote.setNoteLength(this.checkNoteType(unfinishedNote.getNoteLength()));
                                         notesList.insert(unfinishedNote);
 
@@ -75,12 +83,13 @@ public class MidiParser {
     }
 
     /**
+     * Converts note duration to integer value.
      *
      * @param noteLength length of note in MIDI ticks
      * @return note length 1/x note. (e.g. 1/1 note is whole note, 1/2 is half
      * note etc.)
      */
-    public int checkNoteType(int noteLength) {
+    public int checkNoteType(final int noteLength) {
         double notelen = (double) 1.0 * noteLength;
         double res = (double) 1.0 * this.resolution;
 
@@ -114,6 +123,10 @@ public class MidiParser {
         return 16;
     }
 
+    /**
+     *
+     * @return list of note keys
+     */
     public DynamicList<Integer> getNoteKeys() {
 
         DynamicList<Integer> listOfNoteKeys = new DynamicList<>();
@@ -125,6 +138,10 @@ public class MidiParser {
         return listOfNoteKeys;
     }
 
+    /**
+     *
+     * @return list of note lengths
+     */
     public DynamicList<Integer> getNoteLengths() {
 
         DynamicList<Integer> listOfNoteLengths = new DynamicList<>();
@@ -136,6 +153,10 @@ public class MidiParser {
         return listOfNoteLengths;
     }
 
+    /**
+     *
+     * @return list of velocity values
+     */
     public DynamicList<Integer> getVelocities() {
         DynamicList<Integer> listOfVelocities = new DynamicList<>();
 
@@ -146,6 +167,10 @@ public class MidiParser {
         return listOfVelocities;
     }
 
+    /**
+     *
+     * @return list of note objects
+     */
     public DynamicList<Note> getNoteObjects() {
         return this.notesList;
     }

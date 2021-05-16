@@ -4,39 +4,60 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 /**
+ * Dynamic list object with start length of 10.
  *
  * @author juho
  * @param <T>
- *
- * List structure that dynamically increases in size.
  */
 public class DynamicList<T> implements Iterable<T> {
 
+    /**
+     * @param dynamicList array of objects in the list
+     */
     private Object[] dynamicList;
+    /**
+     * @param size current size of the list
+     */
     private int size;
 
     /**
-     * Constructs a new dynamic list object of starting size of 10
+     * Constructor for DynamicList object.
      */
     public DynamicList() {
         this.dynamicList = new Object[10];
         this.size = 0;
     }
 
+    /**
+     * Increases the size of the list when max size is reached.
+     */
     private void increaseSize() {
         int increasedCapacity = dynamicList.length * 2;
         dynamicList = Arrays.copyOf(dynamicList, increasedCapacity);
     }
 
+    /**
+     *
+     * @return current size of the list
+     */
     public int size() {
         return this.size;
     }
 
+    /**
+     *
+     * @return boolean value true if list has no items
+     */
     public boolean isEmpty() {
         return this.size == 0;
     }
 
-    public void insert(T item) {
+    /**
+     * Insert item to the list.
+     *
+     * @param item item to insert
+     */
+    public void insert(final T item) {
         if (this.size == dynamicList.length) {
             this.increaseSize();
         }
@@ -44,14 +65,25 @@ public class DynamicList<T> implements Iterable<T> {
         this.dynamicList[this.size++] = item;
     }
 
-    public void insertMany(T[] arr) {
+    /**
+     * Insert an array of items all at once.
+     *
+     * @param arr array of items
+     */
+    public void insertMany(final T[] arr) {
 
-        for (int i = 0; i < arr.length; i++) {
-            this.insert((T) arr[i]);
+        for (T arr1 : arr) {
+            this.insert((T) arr1);
         }
     }
 
-    public T get(int i) {
+    /**
+     * Get value of index i.
+     *
+     * @param i index
+     * @return value of index i
+     */
+    public T get(final int i) {
         if (i >= this.dynamicList.length || i < 0) {
             throw new NullPointerException();
         }
@@ -59,15 +91,27 @@ public class DynamicList<T> implements Iterable<T> {
         return (T) this.dynamicList[i];
     }
 
+    /**
+     * Print the values of the list to console.
+     */
     public void print() {
         for (int i = 0; i < this.size(); i++) {
             System.out.println(this.dynamicList[i]);
         }
     }
 
-    public void remove(int index) {
+    /**
+     * Remove value of index.
+     *
+     * @param index index of the item to remove from the list
+     */
+    public void remove(final int index) {
         if (index < 0 || index >= this.size) {
-            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + this.size);
+            throw new IndexOutOfBoundsException(
+                            "Index: "
+                            + index
+                            + ", Size: "
+                            + this.size);
         }
 
         Object removed = this.dynamicList[index];
@@ -79,6 +123,11 @@ public class DynamicList<T> implements Iterable<T> {
         size--;
     }
 
+    /**
+     * Custom iterator for DynamicList.
+     *
+     * @return Iterator
+     */
     @Override
     public Iterator<T> iterator() {
         return new DynamicListIterator<T>(this);

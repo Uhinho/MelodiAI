@@ -13,12 +13,12 @@ import melodiai.midi.MidiParser;
 
 public class tempUi {
 
-    private File[] composers;
+    private final File[] composers;
     private File[] songs;
-    private Scanner scanner;
-    private MidiParser midiParser;
-    private ArraySequencer seq;
-    private MidiBuilder mb;
+    private final Scanner scanner;
+    private final MidiParser midiParser;
+    private final ArraySequencer seq;
+    private final MidiBuilder mb;
     private Trie noteKeyTrie;
     private Trie noteLengthTrie;
     private Trie velocityTrie;
@@ -26,6 +26,9 @@ public class tempUi {
     private int lengthInBars;
     private double timeSig;
 
+    /**
+     * UI Constructor.
+     */
     public tempUi() {
         this.scanner = new Scanner(System.in);
         this.composers = new File("Midifiles/").listFiles();
@@ -34,6 +37,9 @@ public class tempUi {
         this.mb = new MidiBuilder();
     }
 
+    /**
+     * Start the UI.
+     */
     public void start() {
         System.out.println("WELCOME TO MELODIAI! \n \n");
 
@@ -50,9 +56,27 @@ public class tempUi {
 
     private void generateMidi() {
 
-        int[] noteSeq = seq.generateSequence(lengthInBars * 10, noteKeyTrie, markovOrder, noteKeyTrie.getRandomRootChild());
-        int[] veloSeq = seq.generateSequence(lengthInBars * 10, velocityTrie, markovOrder, velocityTrie.getRandomRootChild());
-        DynamicList<Double> lengthSeq = seq.generateRhytmSequence(lengthInBars, noteLengthTrie, markovOrder, noteLengthTrie.getRandomRootChild(), timeSig);
+        int[] noteSeq = seq.generateSequence(
+                lengthInBars * 10,
+                noteKeyTrie,
+                markovOrder,
+                noteKeyTrie.getRandomRootChild()
+        );
+
+        int[] veloSeq = seq.generateSequence(
+                lengthInBars * 10,
+                velocityTrie,
+                markovOrder,
+                velocityTrie.getRandomRootChild()
+        );
+
+        DynamicList<Double> lengthSeq = seq.generateRhytmSequence(
+                lengthInBars,
+                noteLengthTrie,
+                markovOrder,
+                noteLengthTrie.getRandomRootChild(),
+                timeSig
+        );
 
         System.out.println("Last but not least, please name your song: ");
         String name = scanner.nextLine();
@@ -65,7 +89,10 @@ public class tempUi {
     }
 
     private void getTimeSig() {
-        System.out.println("Select time signature for your song: 1. 3/4 or 2. 4/4 \n");
+        System.out.println("Select time signature for your song: "
+                + "1. 3/4 or "
+                + "2. 4/4 "
+                + "\n");
 
         while (true) {
 
@@ -108,10 +135,14 @@ public class tempUi {
 
         while (true) {
 
-            int composerSelection = Integer.valueOf(scanner.nextLine());
+            int scanComposer = Integer.valueOf(scanner.nextLine());
 
-            if (composerSelection > 0 && composerSelection <= composers.length) {
-                return new File("Midifiles/" + composers[composerSelection - 1].getName() + "/").listFiles();
+            if (scanComposer > 0 && scanComposer <= composers.length) {
+                return new File(
+                        "Midifiles/"
+                        + composers[scanComposer - 1].getName()
+                        + "/"
+                ).listFiles();
             }
 
             System.out.println("Incorrect selection.");
