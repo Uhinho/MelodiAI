@@ -1,9 +1,7 @@
-
 package melodiai.midi;
 
-
 public class Note {
-    
+
     private int start;
     private int end;
     private int instrument;
@@ -21,7 +19,7 @@ public class Note {
     public int getNoteLength() {
         return noteLength;
     }
-    
+
     public void endNote(int end) {
         this.end = end;
         this.noteLength = end - start;
@@ -29,11 +27,6 @@ public class Note {
 
     public void setNoteLength(int noteLength) {
         this.noteLength = noteLength;
-    }
-
-    @Override
-    public String toString() {
-        return "Note{" + "start=" + start + ", end=" + end + ", instrument=" + instrument + ", velocity=" + velocity + ", key=" + key + ", length=" + noteLength + '}';
     }
 
     public int getStart() {
@@ -64,8 +57,6 @@ public class Note {
         return hash;
     }
 
-    
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -86,5 +77,5 @@ public class Note {
         }
         return true;
     }
-    
+
 }

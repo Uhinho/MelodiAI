@@ -14,42 +14,42 @@ import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Track;
 
 /**
- * 
+ *
  * @author juho
- * 
+ *
  * Object for parsing MIDI files to byte data
  */
-
 public class MidiParser {
-    
+
     private final int NOTE_OFF = 0x80;
     private final DynamicList<Note> notesList = new DynamicList<>();
     private int resolution;
-    
+
     /**
      * Parses note keys from MIDI files
+     *
      * @param files array of paths to MIDI files
      */
     public void parseMidi(File[] files) {
-        
-        for (File file: files) {
-            try {  
+
+        for (File file : files) {
+            try {
                 Sequence sequence = MidiSystem.getSequence(file);
-                for (Track track :  sequence.getTracks()) {
+                for (Track track : sequence.getTracks()) {
                     DynamicList<Note> stillPlaying = new DynamicList<>();
                     this.resolution = sequence.getResolution();
                     for (int i = 0; i < track.size(); i++) {
                         MidiEvent event = track.get(i);
                         MidiMessage message = event.getMessage();
-                        
+
                         if (message instanceof ShortMessage) {
                             ShortMessage sm = (ShortMessage) message;
                             int key = sm.getData1();
                             int velocity = sm.getData2();
                             int channel = sm.getChannel();
-                            if(velocity != 0  && sm.getCommand() != NOTE_OFF) {
-                               Note note = new Note((int) event.getTick(), channel, velocity, key);
-                               stillPlaying.insert(note); 
+                            if (velocity != 0 && sm.getCommand() != NOTE_OFF) {
+                                Note note = new Note((int) event.getTick(), channel, velocity, key);
+                                stillPlaying.insert(note);
                             } else {
                                 Note temporary = new Note(0, channel, velocity, key);
                                 for (int j = 0; j < stillPlaying.size(); j++) {
@@ -57,99 +57,97 @@ public class MidiParser {
                                     if (unfinishedNote.equals(temporary)) {
                                         stillPlaying.remove(j);
                                         unfinishedNote.endNote((int) event.getTick());
-                                        
+
                                         unfinishedNote.setNoteLength(this.checkNoteType(unfinishedNote.getNoteLength()));
                                         notesList.insert(unfinishedNote);
-                                        
+
                                     }
                                 }
-                            } 
+                            }
                         }
-                    }    
+                    }
                 }
 
             } catch (InvalidMidiDataException | IOException ex) {
                 Logger.getLogger(MidiParser.class.getName()).log(Level.SEVERE, null, ex);
-            } 
-        }      
+            }
+        }
     }
-    
+
     /**
-     * 
+     *
      * @param noteLength length of note in MIDI ticks
-     * @return note length 1/x note. (e.g. 1/1 note is whole note, 1/2 is half note etc.)
+     * @return note length 1/x note. (e.g. 1/1 note is whole note, 1/2 is half
+     * note etc.)
      */
     public int checkNoteType(int noteLength) {
         double notelen = (double) 1.0 * noteLength;
         double res = (double) 1.0 * this.resolution;
-        
+
         double result = (double) notelen / res;
-        
+
         // Limit the possible note length to a whole note
         if (result >= 4.0) {
             return 1;
         }
-        
+
         if (result >= 2.0) {
             return 2;
         }
-        
+
         if (result >= 1.0) {
             return 4;
         }
-        
+
         if (result >= 0.5) {
             return 8;
         }
-        
+
         if (result >= 0.25) {
             return 16;
         }
-        
+
         if (result <= 0.125) {
             return 32;
         }
-          
-        
+
         return 16;
     }
-    
+
     public DynamicList<Integer> getNoteKeys() {
-        
+
         DynamicList<Integer> listOfNoteKeys = new DynamicList<>();
-        
-        for (Note note: this.notesList) {
+
+        for (Note note : this.notesList) {
             listOfNoteKeys.insert(note.getKey());
         }
-        
+
         return listOfNoteKeys;
     }
-    
+
     public DynamicList<Integer> getNoteLengths() {
-        
+
         DynamicList<Integer> listOfNoteLengths = new DynamicList<>();
-        
-        for (Note note: this.notesList) {
+
+        for (Note note : this.notesList) {
             listOfNoteLengths.insert(note.getNoteLength());
         }
-        
+
         return listOfNoteLengths;
     }
-    
+
     public DynamicList<Integer> getVelocities() {
         DynamicList<Integer> listOfVelocities = new DynamicList<>();
-        
-        for (Note note: this.notesList) {
+
+        for (Note note : this.notesList) {
             listOfVelocities.insert(note.getVelocity());
         }
-        
+
         return listOfVelocities;
     }
-    
+
     public DynamicList<Note> getNoteObjects() {
         return this.notesList;
     }
-    
-    
-    
+
 }

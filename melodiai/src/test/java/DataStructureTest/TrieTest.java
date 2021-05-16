@@ -63,4 +63,42 @@ public class TrieTest {
         
         assertTrue(trie.includesNoteSequence(new int[]{3,4,5}));
     }
+    
+    @Test
+    public void nullIfNotIncluded() {
+        assertFalse(trie.includesNoteSequence(new int[]{1,100,90,20}));
+    }
+    
+    @Test
+    public void timeComplexityTest() {
+        
+        int markovOrder = 4;
+        Trie testTrie = new Trie(markovOrder);
+        DynamicList<Integer> testList = new DynamicList();
+        
+        for (int i = 0; i < 10000; i++) {
+            double randomNum = Math.random() * 599;
+            testList.insert((int) randomNum);
+        }
+        
+        long start = System.currentTimeMillis();
+        testTrie.put(testList);
+        long end = System.currentTimeMillis();
+        
+        long duration = end - start;
+        System.out.println("Put operation took " + duration + "ms");
+    }
+    
+    @Test
+    public void nodeHasCorrectFollowers() {
+        DynamicList<Integer> list = new DynamicList<>();
+        
+        list.insertMany(new Integer[]{1,2,3,4,5,6,7,8,9,10,9,8,7,6,5,4,3,2,1,2,3,4,5,6,7,8,9,10});
+        Trie t = new Trie(4);
+        t.put(list);
+        assertTrue(t.getRoot().hasChildren());
+        assertEquals(3, t.getRoot().getChildren()[2].getAppearances());
+        assertEquals(5, t.getFollowers(new int[]{2,3,4}).get(0).getNodeKey());
+    }
+    
 }

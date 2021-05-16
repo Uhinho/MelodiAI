@@ -7,10 +7,10 @@ import java.util.Iterator;
  * @author juho
  */
 public class DynamicListIterator<T> implements Iterator {
-    
+
     int index = 0;
     DynamicList<T> list;
-    
+
     public DynamicListIterator(DynamicList<T> list) {
         this.list = list;
     }
@@ -26,5 +26,5 @@ public class DynamicListIterator<T> implements Iterator {
         index++;
         return value;
     }
-    
+
 }

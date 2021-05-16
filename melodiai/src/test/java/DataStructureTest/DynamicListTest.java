@@ -22,7 +22,7 @@ public class DynamicListTest {
     DynamicList<String> testList;
     
     public DynamicListTest() {
-        testList = new DynamicList<String>();
+        testList = new DynamicList<>();
     }
     
     @BeforeClass
@@ -58,6 +58,7 @@ public class DynamicListTest {
         assertEquals(10000, intList.size());
     }
     
+    @Test
     public void listRemoveTest() {
         DynamicList<Integer> intList = new DynamicList<>();
         
@@ -69,10 +70,6 @@ public class DynamicListTest {
             intList.remove(j);
         }
         
-        for (int y = 0; y < 11000; y++) {
-            intList.insert(y);
-        }
-        
-        assertEquals(20000, intList.size());
+        assertEquals(9000, intList.size());
     }
 }

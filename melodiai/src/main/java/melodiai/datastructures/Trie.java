@@ -73,13 +73,6 @@ public class Trie {
         return current.getFollowers();
     }
     
-    public void printFollowers(int[] key) {
-        DynamicList dl = this.getFollowers(key);
-        for (int i = 0; i < dl.size(); i++) {
-            System.out.println(dl.get(i).toString());
-        }
-    }
-    
     /**
      * Checks if sequence is included in the trie
      * @param key array of bytes to find
@@ -100,38 +93,19 @@ public class Trie {
         }     
         return (pointer != null &&  level == order);
     }
-    
-    /**
-     * Helping method to test if the trie is working correctly.
-     * Helps to illustrate the trie structure by printing out the structure
-     * @param node Node to print
-     * @param offset Offset for the recursion
-     */
-    private void printTrie(TrieNode node, int offset) {
-           
-        for (TrieNode child: node.getChildren()) {
-            if (child != null) {
-                System.out.println(child.toStringWithOffset(offset) + "(" + child.getAppearances() + ")");
-                printTrie(child, offset + 2);
-            }          
-        }
-    }
-    
-    /**
-     * Print trie from start to finish
-     */
-    public void print() {
-        this.printTrie(root, 0);
-    }
-    
+
     public TrieNode getRoot() {
         return this.root;
     }
     
+    /**
+     * 
+     * @return key of a randomly picked child of the root node 
+     */
     public int getRandomRootChild() {
         int random = (int) (Math.random() * this.root.getChildren().length);
         
-        while (this.root.getChildren()[random] == null){
+        while (this.root.getChildren()[random] == null) {
             random = (int) (Math.random() * this.root.getChildren().length);
         } 
         return this.root.getChildren()[random].getNodeKey();

@@ -1,7 +1,5 @@
 package melodiai.datastructures;
 
-import java.util.Arrays;
-
 /**
  * 
  * @author juho
@@ -39,17 +37,6 @@ public class TrieNode {
     
     public DynamicList<TrieNode> getFollowers() {
         return this.followers;
-    }
-    
-    /**
-     * toString method to print node key in recursive trie print
-     * @param offset determines how many empty spaces are entered in front of the note key.
-     * @return 
-     */
-    public String toStringWithOffset(int offset) {
-        char[] offs = new char[offset];
-        Arrays.fill(offs, ' ');
-        return new String(offs) + this.key;
     }
 
     @Override
