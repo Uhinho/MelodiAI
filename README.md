@@ -1,6 +1,6 @@
 # MelodiAI
 
-Tämän harjoitustyön tarkoituksena on rakentaa sovellus, joka säveltää melodioita annettuun opetusmateriaaliin pohjautuen.
+Ohjelman tarkoituksena on rakentaa sovellus, joka säveltää melodioita annettuun opetusmateriaaliin pohjautuen.
 
 ## Dokumentaatio
 
@@ -8,4 +8,3 @@ Tämän harjoitustyön tarkoituksena on rakentaa sovellus, joka säveltää melo
 - [Käyttöohje](https://github.com/Uhinho/tiralab/blob/master/dokumentaatio/ohje.md)
 - [Testausdokumentti](https://github.com/Uhinho/tiralab/blob/master/dokumentaatio/testaus.md)
 - [Toteutusdokumentti](https://github.com/Uhinho/tiralab/blob/master/dokumentaatio/toteutusdokumentti.md)
-- [Viikkoraportit](https://github.com/Uhinho/tiralab/blob/master/dokumentaatio/viikkoraportit/)
